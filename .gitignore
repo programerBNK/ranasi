@@ -8,3 +8,5 @@ web/.env.local
 api/.env
 api/target
 .DS_Store
+
+.vercel
