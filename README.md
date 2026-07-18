@@ -91,10 +91,10 @@ does not process license state.
 **Supabase + Railway:** see full guide → [`api/DEPLOY.md`](api/DEPLOY.md)
 
 1. Set `DATABASE_URL` to your Supabase Postgres URI (`?sslmode=require`)  
-2. Deploy `api/` to Railway (Root Directory = `api`, Dockerfile included); custom domain `https://api.ranasi.com`  
-3. Deploy `web/` to Vercel (`NEXT_PUBLIC_API_URL=https://api.ranasi.com`, `NEXT_PUBLIC_APP_URL=https://www.ranasi.com`)  
-4. Set `.env.production` `WXT_API_BASE=https://api.ranasi.com`, then `npm run zip` → Chrome Web Store  
-5. Lemon webhook → `https://api.ranasi.com/v1/webhooks/lemonsqueezy`  
+2. Deploy `api/` to Railway (Root Directory = `api`, Dockerfile included)  
+3. Deploy `web/` to Vercel (`NEXT_PUBLIC_API_URL` → Railway URL)  
+4. Set `.env.production` `WXT_API_BASE` → Railway URL, then `npm run zip` → Chrome Web Store  
+5. Lemon webhook → `https://YOUR-RAILWAY/v1/webhooks/lemonsqueezy`  
 6. Production: `ALLOW_DEV_LICENSE=false`
 
 ## Scripts
