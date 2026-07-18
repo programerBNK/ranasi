@@ -5,6 +5,14 @@ export const metadata: Metadata = {
   title: "Ranasi — Smart AI Browser Assistant",
   description:
     "Desktop new tab + one-click autofill. Free to start. Pro $10/year via license key.",
+  icons: {
+    icon: [
+      { url: "/icon-ranasi.png", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.ico" },
+    ],
+    apple: [{ url: "/apple-icon.png" }],
+  },
 };
 
 export default function RootLayout({
