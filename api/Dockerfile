@@ -1,5 +1,6 @@
 # Ranasi Axum API — Railway / container deploy
-FROM rust:1.85-bookworm AS builder
+# Dependencies (icu_*, idna_adapter) need rustc >= 1.86
+FROM rust:1.86-bookworm AS builder
 
 WORKDIR /app
 RUN apt-get update && apt-get install -y pkg-config libssl-dev && rm -rf /var/lib/apt/lists/*
