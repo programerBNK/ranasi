@@ -5,6 +5,7 @@ watchPatterns = ["**"]
 
 [deploy]
 healthcheckPath = "/health"
-healthcheckTimeout = 100
+# Supabase connect + migrations can take >60s on cold start
+healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 5

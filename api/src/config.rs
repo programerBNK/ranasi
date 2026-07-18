@@ -14,10 +14,21 @@ pub struct Config {
 
 impl Config {
     pub fn from_env() -> anyhow::Result<Self> {
-        let database_url = normalize_database_url(
-            env::var("DATABASE_URL")
-                .unwrap_or_else(|_| "postgres://ranasi:ranasi@127.0.0.1:5433/ranasi".into()),
-        );
+        let on_railway = env::var("RAILWAY_ENVIRONMENT").is_ok()
+            || env::var("RAILWAY_PROJECT_ID").is_ok();
+
+        let raw_db = env::var("DATABASE_URL").unwrap_or_default();
+        if on_railway && raw_db.trim().is_empty() {
+            anyhow::bail!(
+                "DATABASE_URL is missing. In Railway → Variables, set DATABASE_URL to your Supabase Postgres URI (with ?sslmode=require)."
+            );
+        }
+
+        let database_url = normalize_database_url(if raw_db.trim().is_empty() {
+            "postgres://ranasi:ranasi@127.0.0.1:5433/ranasi".into()
+        } else {
+            raw_db
+        });
 
         Ok(Self {
             database_url,
