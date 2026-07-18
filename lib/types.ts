@@ -1,4 +1,19 @@
-export type ThemeId = "mint-night" | "slate-dawn" | "ember-glass";
+/** Free: mint-night, slate-dawn · Pro: 12 premium themes */
+export type ThemeId =
+  | "mint-night"
+  | "slate-dawn"
+  | "noir-gold"
+  | "ember-glass"
+  | "arctic-glass"
+  | "ocean-ink"
+  | "forest-depth"
+  | "rose-metal"
+  | "graphite-pro"
+  | "sandstone"
+  | "aurora-veil"
+  | "copper-loom"
+  | "ivory-night"
+  | "midnight-azure";
 
 export interface SiteEntry {
   /** Unique key: "github.com" or "github.com/login" */
@@ -25,10 +40,14 @@ export interface DesktopState {
   wallpaper: string | null;
 }
 
-export const STORAGE_KEY = "autoflow_desktop_v1";
+export const STORAGE_KEY = "ranasi_desktop_v1";
+export const LEGACY_STORAGE_KEY = "autoflow_desktop_v1";
 
+/** Free users start here; Pro unlock switches to noir-gold */
 export const DEFAULT_STATE: DesktopState = {
   sites: [],
   theme: "mint-night",
   wallpaper: null,
 };
+
+export const PRO_DEFAULT_THEME: ThemeId = "noir-gold";

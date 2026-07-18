@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   DndContext,
   DragEndEvent,
@@ -12,7 +12,13 @@ import {
   arrayMove,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
-import { STORAGE_KEY, type DesktopState, type SiteEntry, type ThemeId } from "../../lib/types";
+import {
+  PRO_DEFAULT_THEME,
+  STORAGE_KEY,
+  type DesktopState,
+  type SiteEntry,
+  type ThemeId,
+} from "../../lib/types";
 import {
   addCustomSite,
   loadDesktopState,
@@ -24,6 +30,11 @@ import {
 } from "../../lib/storage";
 import { CHECKOUT_URL, PRO_PRICE_LABEL } from "../../lib/config";
 import {
+  FREE_SITE_LIMIT,
+  countVisibleSites,
+  effectiveTheme,
+} from "../../lib/entitlements";
+import {
   ensureFreshLicense,
   isProActive,
   LICENSE_STORAGE_KEY,
@@ -34,15 +45,11 @@ import {
   PROFILE_STORAGE_KEY,
   profileCompleteness,
 } from "../../lib/profile";
+import { ALL_THEMES } from "../../lib/themes";
 import { AddTile, SiteTile } from "./components/SiteTile";
 import { ContextMenu } from "./components/ContextMenu";
 import { AddSiteModal } from "./components/AddSiteModal";
-
-const THEMES: { id: ThemeId; label: string; pro?: boolean }[] = [
-  { id: "mint-night", label: "Mint" },
-  { id: "slate-dawn", label: "Slate" },
-  { id: "ember-glass", label: "Ember", pro: true },
-];
+import { ThemePicker } from "./components/ThemePicker";
 
 export function App() {
   const [state, setState] = useState<DesktopState | null>(null);
@@ -50,12 +57,14 @@ export function App() {
   const [profilePct, setProfilePct] = useState(100);
   const [now, setNow] = useState(() => new Date());
   const [showAdd, setShowAdd] = useState(false);
+  const [showThemes, setShowThemes] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [menu, setMenu] = useState<{
     x: number;
     y: number;
     site: SiteEntry;
   } | null>(null);
+  const wasProRef = useRef<boolean | null>(null);
 
   const pro = license ? isProActive(license) : false;
 
@@ -82,6 +91,17 @@ export function App() {
     return () => chrome.storage.onChanged.removeListener(onStorage);
   }, [refresh]);
 
+  // Free → Pro: apply Noir Gold default once
+  useEffect(() => {
+    if (license === null || !state) return;
+    if (wasProRef.current === false && pro) {
+      void setTheme(PRO_DEFAULT_THEME).then(setState);
+      setToast("Welcome to Pro — Noir Gold");
+      window.setTimeout(() => setToast(null), 2800);
+    }
+    wasProRef.current = pro;
+  }, [pro, license, state]);
+
   function showToast(text: string) {
     setToast(text);
     window.setTimeout(() => setToast(null), 2800);
@@ -89,15 +109,17 @@ export function App() {
 
   async function onThemeClick(themeId: ThemeId, requiresPro?: boolean) {
     if (requiresPro && !pro) {
-      showToast(`Ember theme is Pro — ${PRO_PRICE_LABEL}`);
+      showToast(`ธีมนี้เป็น Pro — ${PRO_PRICE_LABEL}`);
+      window.open(CHECKOUT_URL, "_blank");
       return;
     }
     setState(await setTheme(themeId));
+    setShowThemes(false);
   }
 
   async function onExportProfile() {
     if (!pro) {
-      showToast(`Export profile is Pro — ${PRO_PRICE_LABEL}`);
+      showToast(`Export เป็น Pro — ${PRO_PRICE_LABEL}`);
       chrome.runtime.openOptionsPage();
       return;
     }
@@ -108,10 +130,20 @@ export function App() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "autoflow-desktop.json";
+    a.download = "ranasi-desktop.json";
     a.click();
     URL.revokeObjectURL(url);
     showToast("Exported desktop layout");
+  }
+
+  function tryOpenAdd() {
+    if (!state) return;
+    if (!pro && countVisibleSites(state) >= FREE_SITE_LIMIT) {
+      showToast(`ฟรีเพิ่มได้ ${FREE_SITE_LIMIT} เว็บ — Pro ไม่จำกัด`);
+      window.open(CHECKOUT_URL, "_blank");
+      return;
+    }
+    setShowAdd(true);
   }
 
   useEffect(() => {
@@ -121,6 +153,7 @@ export function App() {
 
   const sites = useMemo(() => (state ? visibleSites(state) : []), [state]);
   const ids = useMemo(() => sites.map((s) => s.id), [sites]);
+  const visibleCount = state ? countVisibleSites(state) : 0;
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -135,7 +168,6 @@ export function App() {
     if (oldIndex < 0 || newIndex < 0) return;
 
     const next = arrayMove(sites, oldIndex, newIndex);
-    // Optimistic UI
     setState((prev) => {
       if (!prev) return prev;
       const orderMap = new Map(next.map((s, i) => [s.id, i]));
@@ -155,11 +187,15 @@ export function App() {
 
   if (!state) {
     return (
-      <div className="desktop" data-theme="mint-night">
+      <div className="desktop" data-theme="noir-gold" data-pro="true">
         <div className="desktop__atmosphere" />
       </div>
     );
   }
+
+  const theme = effectiveTheme(state.theme, pro);
+  const themeLabel =
+    ALL_THEMES.find((t) => t.id === theme)?.label ?? "Theme";
 
   const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   const date = now.toLocaleDateString([], {
@@ -169,7 +205,7 @@ export function App() {
   });
 
   return (
-    <div className="desktop" data-theme={state.theme}>
+    <div className="desktop" data-theme={theme} data-pro={pro}>
       <div className="desktop__atmosphere" />
       {state.wallpaper && (
         <div
@@ -180,18 +216,23 @@ export function App() {
 
       <header className="desktop__top">
         <div className="brand">
-          <h1 className="brand__name">AutoFlow</h1>
+          <p className="brand__eyebrow">
+            {pro ? "Pro Desktop" : "Ranasi Desktop"}
+          </p>
+          <h1 className="brand__name">Ranasi</h1>
           <p className="brand__tag">
-            Desktop ของคุณ — เว็บหลักที่เคยเข้า ปักหมุด ลากจัดเรียง ลบได้ทันที
+            {pro
+              ? "12 ธีมพรีเมียม · เพิ่มเว็บได้ไม่จำกัด · ดูลึก มีมิติ"
+              : `ฟรี: ธีม Mint/Slate · เพิ่มเว็บได้ ${FREE_SITE_LIMIT} รายการ`}
           </p>
           {profilePct < 50 && (
             <button
               type="button"
               className="chip"
-              style={{ marginTop: 12 }}
+              style={{ marginTop: 10 }}
               onClick={() => chrome.runtime.openOptionsPage()}
             >
-              ตั้งค่า Profile ครั้งเดียว → เริ่ม Auto-Fill
+              ตั้งค่า Profile → เริ่ม Auto-Fill
             </button>
           )}
         </div>
@@ -199,49 +240,50 @@ export function App() {
         <div className="clock">
           <div className="clock__time">{time}</div>
           <div className="clock__date">{date}</div>
-          <div className="toolbar" style={{ marginTop: 14 }}>
+          <div className="meta-line">
+            {pro
+              ? `${visibleCount} เว็บ · ไม่จำกัด`
+              : `${visibleCount}/${FREE_SITE_LIMIT} เว็บ`}
+          </div>
+          <div className="toolbar">
             <button
               type="button"
-              className="chip"
+              className="chip chip--pro"
               data-active={pro}
               onClick={() => {
                 if (pro) chrome.runtime.openOptionsPage();
                 else window.open(CHECKOUT_URL, "_blank");
               }}
-              title={pro ? "Manage license" : `Upgrade — ${PRO_PRICE_LABEL}`}
             >
               {pro ? "Pro" : "Free → Pro"}
             </button>
-            {THEMES.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                className="chip"
-                data-active={state.theme === t.id}
-                onClick={() => onThemeClick(t.id, t.pro)}
-                title={
-                  t.pro && !pro
-                    ? `Pro theme — ${PRO_PRICE_LABEL}`
-                    : t.label
-                }
-              >
-                {t.label}
-                {t.pro && !pro ? " ·" : ""}
-              </button>
-            ))}
+
             <button
               type="button"
               className="chip"
-              onClick={onExportProfile}
-              title={pro ? "Export layout" : "Pro feature"}
+              data-active={showThemes}
+              onClick={() => setShowThemes((v) => !v)}
+              title="Themes"
             >
+              {themeLabel}
+            </button>
+
+            <ThemePicker
+              open={showThemes}
+              current={theme}
+              pro={pro}
+              onClose={() => setShowThemes(false)}
+              onSelect={onThemeClick}
+            />
+
+            <button type="button" className="chip" onClick={onExportProfile}>
               Export
             </button>
             <button
               type="button"
               className="icon-btn"
               title="Add website"
-              onClick={() => setShowAdd(true)}
+              onClick={tryOpenAdd}
             >
               +
             </button>
@@ -253,7 +295,8 @@ export function App() {
         {sites.length === 0 ? (
           <div className="empty">
             <strong>ยังไม่มีเว็บบน Desktop</strong>
-            ท่องเว็บตามปกติ แล้วกลับมาที่แท็บใหม่ — หรือกด + เพื่อเพิ่มเอง
+            กด + เพื่อเพิ่ม
+            {!pro && ` · ฟรีได้สูงสุด ${FREE_SITE_LIMIT} เว็บ`}
           </div>
         ) : (
           <DndContext
@@ -274,7 +317,7 @@ export function App() {
                     }}
                   />
                 ))}
-                <AddTile onClick={() => setShowAdd(true)} />
+                <AddTile onClick={tryOpenAdd} />
               </div>
             </SortableContext>
           </DndContext>
@@ -306,26 +349,21 @@ export function App() {
         <AddSiteModal
           onClose={() => setShowAdd(false)}
           onAdd={async (domain) => {
-            setState(await addCustomSite(domain));
+            try {
+              setState(await addCustomSite(domain));
+            } catch (err) {
+              if (err instanceof Error && err.message === "SITE_LIMIT") {
+                showToast(`ฟรีเพิ่มได้ ${FREE_SITE_LIMIT} เว็บ — Pro ไม่จำกัด`);
+                window.open(CHECKOUT_URL, "_blank");
+                return;
+              }
+              throw err;
+            }
           }}
         />
       )}
 
-      {toast && (
-        <div
-          className="chip"
-          style={{
-            position: "fixed",
-            left: "50%",
-            bottom: 28,
-            transform: "translateX(-50%)",
-            zIndex: 60,
-            pointerEvents: "none",
-          }}
-        >
-          {toast}
-        </div>
-      )}
+      {toast && <div className="toast">{toast}</div>}
     </div>
   );
 }

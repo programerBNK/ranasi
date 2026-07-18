@@ -116,10 +116,10 @@ async function runAutoFill(message: FillRequest): Promise<FillResponse> {
         map = { ...map, ...data.map };
         mode = "ai";
       } else if (data.error) {
-        console.warn("[AutoFlow] server fill:", data.error);
+        console.warn("[Ranasi] server fill:", data.error);
       }
     } catch (err) {
-      console.warn("[AutoFlow] server fill failed, heuristic only", err);
+      console.warn("[Ranasi] server fill failed, heuristic only", err);
     }
   } else if (settings.useAiFill && settings.openaiApiKey.trim()) {
     // Free advanced: optional user-owned OpenAI key
@@ -133,7 +133,7 @@ async function runAutoFill(message: FillRequest): Promise<FillResponse> {
       mode = Object.keys(aiMap).length ? "mixed" : "heuristic";
       if (Object.keys(aiMap).length >= Object.keys(map).length) mode = "ai";
     } catch (err) {
-      console.warn("[AutoFlow] AI fill failed, using heuristic", err);
+      console.warn("[Ranasi] AI fill failed, using heuristic", err);
     }
   }
 

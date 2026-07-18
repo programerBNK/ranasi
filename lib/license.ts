@@ -183,8 +183,8 @@ export async function deactivateLicense(): Promise<void> {
 async function buildInstanceName(): Promise<string> {
   try {
     const platform = await chrome.runtime.getPlatformInfo();
-    return `AutoFlow-${platform.os}-${chrome.runtime.id.slice(0, 8)}`;
+    return `Ranasi-${platform.os}-${chrome.runtime.id.slice(0, 8)}`;
   } catch {
-    return `AutoFlow-${Date.now()}`;
+    return `Ranasi-${Date.now()}`;
   }
 }

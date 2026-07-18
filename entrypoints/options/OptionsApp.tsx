@@ -133,7 +133,7 @@ export function OptionsApp() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "autoflow-profiles.json";
+    a.download = "ranasi-profiles.json";
     a.click();
     URL.revokeObjectURL(url);
     setMsg({ type: "ok", text: "Export แล้ว" });
@@ -241,9 +241,10 @@ export function OptionsApp() {
 
   return (
     <div className="wrap">
-      <h1>AutoFlow</h1>
+      <h1>Ranasi</h1>
       <p className="lead">
-        ตั้งค่าครั้งเดียว → กด Auto-Fill ได้ทันที · Free = heuristic · Pro = Server AI
+        ตั้งค่า Profile ครั้งเดียว → กด Auto-Fill ได้ทันที · Free ใช้ในเครื่อง · Pro
+        ได้คีย์จากอีเมลหลังจ่ายเงิน
       </p>
 
       <div className="tabs">
@@ -454,8 +455,9 @@ export function OptionsApp() {
               </>
             ) : (
               <p className="meta">
-                Free: Profile + heuristic Auto-Fill · Pro ({PRO_PRICE_LABEL}):
-                Server AI, {PRO_PROFILE_LIMIT} profiles, export/import, Ember theme
+                Free: 1 profile · ธีม 2 แบบ · Desktop สูงสุด 10 เว็บ · Pro (
+                {PRO_PRICE_LABEL}): Server AI · {PRO_PROFILE_LIMIT} profiles ·
+                12 ธีม · เว็บไม่จำกัด · export/import
               </p>
             )}
           </div>
@@ -493,7 +495,8 @@ export function OptionsApp() {
               <p className={`msg ${msg.type}`}>{msg.text}</p>
             )}
             <p className="meta" style={{ marginTop: 14 }}>
-              Dev: <code>AF-DEV-PRO</code> (API @ localhost:3130)
+              ได้คีย์จากอีเมลหลังจ่ายเงินที่เว็บ Ranasi → วางที่นี่ → Activate ·
+              ไม่ต้องโหลดโฟลเดอร์ใดๆ
             </p>
           </form>
         </>

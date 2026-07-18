@@ -1,5 +1,6 @@
 import {
   DEFAULT_STATE,
+  LEGACY_STORAGE_KEY,
   STORAGE_KEY,
   type DesktopState,
   type SiteEntry,
@@ -13,6 +14,11 @@ import {
   siteUrl,
   toMainDomain,
 } from "./domain";
+import { canAddOrUnhideSite } from "./entitlements";
+import { isPro } from "./license";
+import { ALL_THEMES } from "./themes";
+
+const VALID_THEMES = new Set(ALL_THEMES.map((t) => t.id));
 
 function browserStorage() {
   return chrome.storage.local;
@@ -29,13 +35,27 @@ function normalizeSite(raw: SiteEntry): SiteEntry {
   };
 }
 
+function normalizeTheme(raw: string | undefined): ThemeId {
+  if (raw && VALID_THEMES.has(raw as ThemeId)) return raw as ThemeId;
+  return DEFAULT_STATE.theme;
+}
+
 export async function loadDesktopState(): Promise<DesktopState> {
-  const result = await browserStorage().get(STORAGE_KEY);
-  const raw = result[STORAGE_KEY] as DesktopState | undefined;
+  const result = await browserStorage().get([STORAGE_KEY, LEGACY_STORAGE_KEY]);
+  let raw = result[STORAGE_KEY] as DesktopState | undefined;
+
+  if (!raw && result[LEGACY_STORAGE_KEY]) {
+    raw = result[LEGACY_STORAGE_KEY] as DesktopState;
+    await browserStorage().set({ [STORAGE_KEY]: raw });
+    await browserStorage().remove(LEGACY_STORAGE_KEY);
+  }
+
   if (!raw) return structuredClone(DEFAULT_STATE);
+
   return {
     ...DEFAULT_STATE,
     ...raw,
+    theme: normalizeTheme(raw.theme as string | undefined),
     sites: Array.isArray(raw.sites) ? raw.sites.map(normalizeSite) : [],
   };
 }
@@ -53,7 +73,7 @@ export async function updateDesktopState(
   return next;
 }
 
-/** Record a visit — main domain only (no auto path clutter). */
+/** Record a visit — Free capped at FREE_SITE_LIMIT new sites. */
 export async function recordVisit(rawUrl: string, title?: string): Promise<void> {
   const domain = toMainDomain(rawUrl);
   if (!domain || domain === "localhost" || /^\d+\.\d+\.\d+\.\d+$/.test(domain)) {
@@ -61,6 +81,7 @@ export async function recordVisit(rawUrl: string, title?: string): Promise<void>
   }
 
   const id = domainId(domain);
+  const pro = await isPro();
 
   await updateDesktopState((prev) => {
     const existing = prev.sites.find((s) => s.id === id);
@@ -82,6 +103,8 @@ export async function recordVisit(rawUrl: string, title?: string): Promise<void>
         ),
       };
     }
+
+    if (!canAddOrUnhideSite(prev, pro)) return prev;
 
     const maxOrder = prev.sites.reduce((m, s) => Math.max(m, s.order), -1);
     const entry: SiteEntry = {
@@ -130,14 +153,19 @@ export async function reorderSites(orderedIds: string[]): Promise<DesktopState> 
   });
 }
 
-/** Manual add — supports path เช่น github.com/login */
+/** Manual add — Free max FREE_SITE_LIMIT visible sites. */
 export async function addCustomSite(input: string): Promise<DesktopState> {
   const parsed = parseSiteInput(input);
   if (!parsed) throw new Error("Invalid URL");
 
+  const pro = await isPro();
+
   return updateDesktopState((prev) => {
     const existing = prev.sites.find((s) => s.id === parsed.id);
     if (existing) {
+      if (existing.hidden && !canAddOrUnhideSite(prev, pro, parsed.id)) {
+        throw new Error("SITE_LIMIT");
+      }
       return {
         ...prev,
         sites: prev.sites.map((s) =>
@@ -153,6 +181,10 @@ export async function addCustomSite(input: string): Promise<DesktopState> {
             : s,
         ),
       };
+    }
+
+    if (!canAddOrUnhideSite(prev, pro)) {
+      throw new Error("SITE_LIMIT");
     }
 
     const maxOrder = prev.sites.reduce((m, s) => Math.max(m, s.order), -1);

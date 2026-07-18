@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AutoFlow — Smart AI Browser Assistant",
+  title: "Ranasi — Smart AI Browser Assistant",
   description:
-    "Desktop new tab + one-click AI autofill. Free to start. Pro $10/year.",
+    "Desktop new tab + one-click autofill. Free to start. Pro $10/year via license key.",
 };
 
 export default function RootLayout({

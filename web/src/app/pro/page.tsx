@@ -1,33 +1,41 @@
 import { checkoutUrl, isCheckoutConfigured } from "@/lib/checkout";
+import {
+  extensionStoreUrl,
+  isExtensionPublished,
+} from "@/lib/extension";
 import styles from "./pro.module.css";
 
 export const metadata = {
-  title: "Get AutoFlow Pro — $10/year",
-  description: "Pay once a year. Unlock server AI autofill, multi-profile, and export.",
+  title: "Get Ranasi Pro — $10/year",
+  description:
+    "Pay $10/year, get a license key by email, activate in the extension.",
 };
 
 export default function ProPage() {
   const ready = isCheckoutConfigured();
   const payUrl = checkoutUrl();
+  const storeUrl = extensionStoreUrl();
+  const published = isExtensionPublished();
 
   return (
     <main className="shell">
       <nav className="nav">
         <a className="logo" href="/">
-          AutoFlow
+          Ranasi
         </a>
         <div className="nav-links">
-          <a href="/#pricing">Pricing</a>
+          <a href="/#free">ใช้ฟรี</a>
+          <a href="/#pro-flow">หลังจ่ายเงิน</a>
           <a href="/activate">Activate</a>
         </div>
       </nav>
 
       <section className={styles.hero}>
-        <p className={styles.eyebrow}>AutoFlow Pro</p>
-        <h1>Pay $10/year — unlock server AI autofill</h1>
+        <p className={styles.eyebrow}>Ranasi Pro</p>
+        <h1>จ่าย $10/ปี → ได้รหัสทางอีเมล → ใช้งาน Pro</h1>
         <p className={styles.lead}>
-          จ่ายผ่าน Lemon Squeezy (บัตรเครดิต / ช่องทางที่รองรับ) → ได้ License Key
-          ทางอีเมล → วางใน Extension → เป็น Pro ทันที
+          ไม่ต้องโหลดโฟลเดอร์ใดๆ · ติดตั้งจาก Chrome Web Store · วาง License Key
+          ใน Extension Options เท่านั้น
         </p>
       </section>
 
@@ -35,7 +43,7 @@ export default function ProPage() {
         <div className={styles.priceRow}>
           <div>
             <h2>Pro annual</h2>
-            <p className={styles.muted}>ต่ออายุรายปี · ยกเลิกได้ตามรอบบิล</p>
+            <p className={styles.muted}>รายปี · ได้คีย์ทางอีเมลหลังชำระ</p>
           </div>
           <div className={styles.price}>
             $10<span>/year</span>
@@ -43,65 +51,101 @@ export default function ProPage() {
         </div>
 
         <ul className={styles.perks}>
-          <li>Server AI Auto-Fill (ไม่ต้องใส่ OpenAI key เอง)</li>
-          <li>ได้ถึง 5 profiles</li>
-          <li>Export / Import โปรไฟล์</li>
-          <li>Ember theme + ฟีเจอร์ Pro ต่อๆ ไป</li>
+          <li>Server AI Auto-Fill</li>
+          <li>สูงสุด 5 Profiles</li>
+          <li>12 ธีมพรีเมียม — default Noir Gold (เงาหลายมิติ)</li>
+          <li>เพิ่มเว็บบน Desktop ได้ไม่จำกัด (ฟรีจำกัด 10)</li>
+          <li>Export / Import</li>
         </ul>
 
         {ready ? (
           <>
-            <a className="btn btn-primary" href={payUrl} target="_blank" rel="noreferrer">
-              Pay with Lemon Squeezy — $10/year
+            <a
+              className="btn btn-primary"
+              href={payUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              จ่ายด้วย Lemon Squeezy — $10/ปี
             </a>
             <p className={styles.hint}>
-              หลังจ่ายสำเร็จ ระบบพาไปหน้า Success · License Key ส่งเข้าอีเมลที่ใช่ชำระเงิน
+              หลังจ่ายสำเร็จ → เช็กอีเมลหา License Key → ทำตามขั้นตอนด้านล่าง
             </p>
           </>
         ) : (
           <div className={styles.setupBox}>
-            <strong>ยังไม่ได้ต่อช่องทางจ่ายเงิน</strong>
+            <strong>ช่องทางจ่ายเงินยังไม่พร้อมบนเว็บนี้</strong>
             <p>
-              ตั้งค่า Lemon Squeezy แล้วใส่ checkout URL ใน{" "}
-              <code>web/.env.local</code>:
+              เจ้าของร้านต้องตั้งค่า Lemon Squeezy ก่อน ผู้ใช้จริงจะเห็นปุ่มจ่ายเงิน
             </p>
-            <pre className={styles.code}>{`NEXT_PUBLIC_CHECKOUT_URL=https://YOUR_STORE.lemonsqueezy.com/checkout/buy/VARIANT_ID
-NEXT_PUBLIC_APP_URL=http://localhost:3120`}</pre>
-            <ol className={styles.setupSteps}>
-              <li>สมัคร <a href="https://www.lemonsqueezy.com" target="_blank" rel="noreferrer">Lemon Squeezy</a></li>
-              <li>สร้าง Product <strong>AutoFlow Pro</strong> · ราคา <strong>$10 / year</strong></li>
-              <li>เปิด License Keys บนสินค้า</li>
-              <li>คัดลอก Shareable Checkout URL → วางใน env ด้านบน</li>
-              <li>Webhook (production): <code>https://YOUR_API/v1/webhooks/lemonsqueezy</code></li>
-              <li>รีสตาร์ท <code>npm run dev:web</code> แล้วปุ่ม Pay จะโผล่</li>
-            </ol>
             <div className="cta-row" style={{ marginTop: 18 }}>
               <a className="btn btn-ghost" href="/activate">
-                ทดสอบ Pro แบบ local (AF-DEV-PRO)
+                นักพัฒนา: ทดสอบด้วย RN-DEV-PRO
               </a>
             </div>
           </div>
         )}
       </section>
 
-      <section className={styles.flow}>
-        <h2>หลังจ่ายเงิน ทำยังไง</h2>
-        <div className="steps">
-          <div className="step">
-            <strong>1. จ่าย $10</strong>
-            <span>Lemon Squeezy รับบัตร · ออกใบเสร็จให้คุณ</span>
-          </div>
-          <div className="step">
-            <strong>2. ได้ License Key</strong>
-            <span>เช็กอีเมลจาก Lemon Squeezy (และหน้า Success)</span>
-          </div>
-          <div className="step">
-            <strong>3. Activate</strong>
+      <p className={styles.hint}>
+        Local development: use <code>RN-DEV-PRO</code>. The legacy{" "}
+        <code>AF-DEV-PRO</code> key also works when dev licenses are enabled.
+      </p>
+
+      <section className="section" id="after-pay">
+        <h2>หลังได้รหัสจากอีเมล — ทีละขั้นจนใช้ได้</h2>
+        <ol className="guide-list numbered">
+          <li>
+            <strong>เปิดอีเมลจาก Lemon Squeezy</strong>
             <span>
-              เปิด Extension Options → License → วางคีย์ → หรือใช้หน้า{" "}
-              <a href="/activate">/activate</a>
+              คัดลอก <strong>License Key</strong> ทั้งชุด · ถ้าไม่เจอ เช็ก Spam
             </span>
-          </div>
+          </li>
+          <li>
+            <strong>ติดตั้ง Ranasi (ถ้ายังไม่มี)</strong>
+            <span>
+              {published ? (
+                <>
+                  จาก{" "}
+                  <a href={storeUrl} target="_blank" rel="noreferrer">
+                    Chrome Web Store
+                  </a>{" "}
+                  — ไม่ต้องดาวน์โหลดโฟลเดอร์
+                </>
+              ) : (
+                <>
+                  จาก Chrome Web Store (เมื่อเผยแพร่แล้ว) —{" "}
+                  <em>ผู้ใช้จริงไม่ใช้ Load unpacked / ไม่ใช้โฟลเดอร์โปรเจกต์</em>
+                </>
+              )}
+            </span>
+          </li>
+          <li>
+            <strong>เปิด Extension Options</strong>
+            <span>
+              Chrome มุมขวาบน → ไอคอนชิ้นส่วนจิ๊กซอว์ → Ranasi →{" "}
+              <strong>ตัวเลือกส่วนขยาย (Options)</strong>
+            </span>
+          </li>
+          <li>
+            <strong>แท็บ License → วางคีย์ → Activate</strong>
+            <span>สถานะต้องขึ้น Pro · ถ้าผิดพลาด ลองหน้า /activate ตรวจคีย์ก่อน</span>
+          </li>
+          <li>
+            <strong>ใช้งาน</strong>
+            <span>
+              เปิดแท็บใหม่ → ได้ธีม <strong>Noir Gold</strong> อัตโนมัติ · เลือกได้อีก
+              11 ธีม · เพิ่มเว็บได้ไม่จำกัด · ตั้ง Profile · กด Auto-Fill with AI
+            </span>
+          </li>
+        </ol>
+        <div className="cta-row">
+          <a className="btn btn-primary" href="/activate">
+            ไปหน้า Activate / ตรวจคีย์
+          </a>
+          <a className="btn btn-ghost" href="/#free">
+            ยังไม่ซื้อ — ใช้ฟรีก่อน
+          </a>
         </div>
       </section>
     </main>

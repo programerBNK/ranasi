@@ -1,5 +1,5 @@
 [package]
-name = "autoflow-api"
+name = "ranasi-api"
 version = "0.1.0"
 edition = "2021"
 

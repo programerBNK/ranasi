@@ -1,5 +1,5 @@
 /**
- * Lemon Squeezy checkout link for AutoFlow Pro ($10/year).
+ * Lemon Squeezy checkout link for Ranasi Pro ($10/year).
  * Set NEXT_PUBLIC_CHECKOUT_URL to your shareable checkout URL, e.g.
  * https://YOUR_STORE.lemonsqueezy.com/checkout/buy/VARIANT_UUID
  * Append ?checkout[success_url]=https://YOUR_DOMAIN/success for post-pay redirect.

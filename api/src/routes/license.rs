@@ -5,12 +5,23 @@ use crate::{
     routes::AppState,
     services::lemon,
 };
-use axum::{Json, extract::State};
+use axum::{extract::State, Json};
 use chrono::{DateTime, Duration, Utc};
 use std::sync::Arc;
 use uuid::Uuid;
 
-const DEV_KEY: &str = "AF-DEV-PRO";
+const DEV_KEY: &str = "RN-DEV-PRO";
+const LEGACY_DEV_KEY: &str = "AF-DEV-PRO";
+
+fn canonical_dev_key(key: &str) -> Option<&'static str> {
+    if key.eq_ignore_ascii_case(DEV_KEY) {
+        Some(DEV_KEY)
+    } else if key.eq_ignore_ascii_case(LEGACY_DEV_KEY) {
+        Some(LEGACY_DEV_KEY)
+    } else {
+        None
+    }
+}
 
 pub async fn activate(
     State(state): State<Arc<AppState>>,
@@ -20,12 +31,15 @@ pub async fn activate(
     if key.is_empty() {
         return Err(AppError::BadRequest("Missing licenseKey".into()));
     }
-    let instance_name = body
-        .instance_name
-        .unwrap_or_else(|| "AutoFlow".into());
+    let instance_name = body.instance_name.unwrap_or_else(|| "Ranasi".into());
 
-    if state.config.allow_dev_license && key.eq_ignore_ascii_case(DEV_KEY) {
-        return Ok(Json(activate_dev(&state, &key, &instance_name).await?));
+    if let Some(dev_key) = state
+        .config
+        .allow_dev_license
+        .then(|| canonical_dev_key(&key))
+        .flatten()
+    {
+        return Ok(Json(activate_dev(&state, dev_key, &instance_name).await?));
     }
 
     // Prefer Lemon Squeezy when reachable; also persist locally
@@ -44,10 +58,7 @@ pub async fn activate(
 
             let lk = payload.license_key.as_ref();
             let expires = parse_expires(lk.and_then(|k| k.expires_at.as_deref()));
-            let email = payload
-                .meta
-                .as_ref()
-                .and_then(|m| m.customer_email.clone());
+            let email = payload.meta.as_ref().and_then(|m| m.customer_email.clone());
 
             db::upsert_license(
                 &state.pool,
@@ -116,8 +127,13 @@ pub async fn validate(
         return Err(AppError::BadRequest("Missing licenseKey".into()));
     }
 
-    if state.config.allow_dev_license && key.eq_ignore_ascii_case(DEV_KEY) {
-        let license = ensure_dev_license(&state).await?;
+    if let Some(dev_key) = state
+        .config
+        .allow_dev_license
+        .then(|| canonical_dev_key(&key))
+        .flatten()
+    {
+        let license = ensure_dev_license(&state, dev_key).await?;
         return Ok(Json(LicenseResponse {
             valid: true,
             error: None,
@@ -159,10 +175,7 @@ pub async fn validate(
         Ok(payload) if payload.valid == Some(true) => {
             let lk = payload.license_key.as_ref();
             let expires = parse_expires(lk.and_then(|k| k.expires_at.as_deref()));
-            let email = payload
-                .meta
-                .as_ref()
-                .and_then(|m| m.customer_email.clone());
+            let email = payload.meta.as_ref().and_then(|m| m.customer_email.clone());
             db::upsert_license(
                 &state.pool,
                 &key,
@@ -180,9 +193,9 @@ pub async fn validate(
             Ok(Json(LicenseResponse {
                 valid: true,
                 error: None,
-                instance_id: body.instance_id.or_else(|| {
-                    payload.instance.as_ref().and_then(|i| i.id.clone())
-                }),
+                instance_id: body
+                    .instance_id
+                    .or_else(|| payload.instance.as_ref().and_then(|i| i.id.clone())),
                 email,
                 expires_at: expires,
                 status: Some("active".into()),
@@ -214,9 +227,14 @@ pub async fn deactivate(
     let key = body.license_key.trim().to_string();
     let instance_id = body.instance_id.trim().to_string();
 
-    if state.config.allow_dev_license && key.eq_ignore_ascii_case(DEV_KEY) {
+    if let Some(dev_key) = state
+        .config
+        .allow_dev_license
+        .then(|| canonical_dev_key(&key))
+        .flatten()
+    {
         if let Ok(uuid) = Uuid::parse_str(&instance_id) {
-            let _ = db::delete_instance(&state.pool, uuid, &key).await;
+            let _ = db::delete_instance(&state.pool, uuid, dev_key).await;
         }
         return Ok(Json(LicenseResponse {
             valid: true,
@@ -248,7 +266,7 @@ async fn activate_dev(
     key: &str,
     instance_name: &str,
 ) -> AppResult<LicenseResponse> {
-    let license = ensure_dev_license(state).await?;
+    let license = ensure_dev_license(state, key).await?;
     let id = db::create_instance(&state.pool, key, instance_name).await?;
     Ok(LicenseResponse {
         valid: true,
@@ -309,13 +327,13 @@ async fn activate_local(
     }))
 }
 
-async fn ensure_dev_license(state: &AppState) -> AppResult<crate::models::License> {
+async fn ensure_dev_license(state: &AppState, key: &str) -> AppResult<crate::models::License> {
     let expires = Utc::now() + Duration::days(365);
     Ok(db::upsert_license(
         &state.pool,
-        DEV_KEY,
+        key,
         "active",
-        Some("dev@autoflow.local"),
+        Some("dev@ranasi.local"),
         Some(expires),
         99,
         0,

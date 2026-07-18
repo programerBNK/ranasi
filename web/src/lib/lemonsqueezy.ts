@@ -48,14 +48,15 @@ function mapLicense(json: Record<string, unknown>, okFlag: string): LicenseResul
   };
 }
 
-/** Local/dev shortcut — key AF-DEV-PRO (no Lemon Squeezy needed). */
+/** Local/dev shortcut — RN-DEV-PRO, with AF-DEV-PRO kept for compatibility. */
 export function tryMockLicense(licenseKey: string): LicenseResult | null {
   const allowMock =
     process.env.ALLOW_DEV_LICENSE === "true" ||
     process.env.NODE_ENV === "development";
 
   if (!allowMock) return null;
-  if (licenseKey.trim().toUpperCase() !== "AF-DEV-PRO") return null;
+  const key = licenseKey.trim().toUpperCase();
+  if (key !== "RN-DEV-PRO" && key !== "AF-DEV-PRO") return null;
 
   const expires = new Date();
   expires.setFullYear(expires.getFullYear() + 1);
@@ -64,7 +65,7 @@ export function tryMockLicense(licenseKey: string): LicenseResult | null {
     valid: true,
     error: null,
     instanceId: "dev-instance",
-    email: "dev@autoflow.local",
+    email: "dev@ranasi.local",
     expiresAt: expires.toISOString(),
     status: "active",
   };

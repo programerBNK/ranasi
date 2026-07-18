@@ -20,16 +20,21 @@ async fn main() -> anyhow::Result<()> {
         .init();
 
     let config = Config::from_env()?;
+    tracing::info!(
+        "Connecting to database (host redacted)…"
+    );
     let pool = PgPoolOptions::new()
         .max_connections(10)
+        .acquire_timeout(std::time::Duration::from_secs(30))
         .connect(&config.database_url)
         .await
-        .context("connect postgres")?;
+        .context("connect postgres (check DATABASE_URL / sslmode=require for Supabase)")?;
 
     sqlx::migrate!("./migrations")
         .run(&pool)
         .await
         .context("run migrations")?;
+    tracing::info!("Migrations OK");
 
     let http = reqwest::Client::builder()
         .timeout(std::time::Duration::from_secs(45))
@@ -43,7 +48,7 @@ async fn main() -> anyhow::Result<()> {
 
     let app = routes::router(state);
     let addr: SocketAddr = format!("{}:{}", config.host, config.port).parse()?;
-    tracing::info!("AutoFlow API listening on http://{addr}");
+    tracing::info!("Ranasi API listening on http://{addr}");
 
     let listener = tokio::net::TcpListener::bind(addr).await?;
     axum::serve(listener, app).await?;

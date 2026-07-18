@@ -14,7 +14,7 @@ export default defineConfig({
     },
   },
   manifest: {
-    name: "AutoFlow",
+    name: "Ranasi",
     description:
       "Smart AI Browser Assistant — one-click autofill from your local profile",
     permissions: ["storage", "history", "tabs"],

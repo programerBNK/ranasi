@@ -5,12 +5,23 @@ use crate::{
     routes::AppState,
     services::openai,
 };
-use axum::{Json, extract::State};
+use axum::{extract::State, Json};
 use serde_json::Value;
 use std::sync::Arc;
 use uuid::Uuid;
 
-const DEV_KEY: &str = "AF-DEV-PRO";
+const DEV_KEY: &str = "RN-DEV-PRO";
+const LEGACY_DEV_KEY: &str = "AF-DEV-PRO";
+
+fn canonical_dev_key(key: &str) -> Option<&'static str> {
+    if key.eq_ignore_ascii_case(DEV_KEY) {
+        Some(DEV_KEY)
+    } else if key.eq_ignore_ascii_case(LEGACY_DEV_KEY) {
+        Some(LEGACY_DEV_KEY)
+    } else {
+        None
+    }
+}
 const BLOCKED_PROFILE_KEYS: &[&str] = &[
     "cardNumber",
     "cardCvc",
@@ -34,14 +45,19 @@ pub async fn fill(
         return Err(AppError::BadRequest("No fields".into()));
     }
 
-    let is_dev = state.config.allow_dev_license && key.eq_ignore_ascii_case(DEV_KEY);
+    let dev_key = state
+        .config
+        .allow_dev_license
+        .then(|| canonical_dev_key(&key))
+        .flatten();
+    let is_dev = dev_key.is_some();
 
     let license = if is_dev {
         db::upsert_license(
             &state.pool,
-            DEV_KEY,
+            dev_key.expect("checked above"),
             "active",
-            Some("dev@autoflow.local"),
+            Some("dev@ranasi.local"),
             Some(chrono::Utc::now() + chrono::Duration::days(365)),
             99,
             0,
@@ -66,7 +82,8 @@ pub async fn fill(
         }
     }
 
-    let usage = db::bump_fill_usage(&state.pool, &license.key, state.config.fill_daily_limit).await?;
+    let usage =
+        db::bump_fill_usage(&state.pool, &license.key, state.config.fill_daily_limit).await?;
     if usage > state.config.fill_daily_limit {
         return Err(AppError::TooManyRequests(format!(
             "Daily AI fill limit ({}) reached",

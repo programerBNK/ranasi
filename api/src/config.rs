@@ -14,14 +14,19 @@ pub struct Config {
 
 impl Config {
     pub fn from_env() -> anyhow::Result<Self> {
+        let database_url = normalize_database_url(
+            env::var("DATABASE_URL")
+                .unwrap_or_else(|_| "postgres://ranasi:ranasi@127.0.0.1:5433/ranasi".into()),
+        );
+
         Ok(Self {
-            database_url: env::var("DATABASE_URL")
-                .unwrap_or_else(|_| "postgres://autoflow:autoflow@127.0.0.1:5433/autoflow".into()),
+            database_url,
             host: env::var("HOST").unwrap_or_else(|_| "0.0.0.0".into()),
             port: env::var("PORT")
                 .ok()
                 .and_then(|p| p.parse().ok())
                 .unwrap_or(3130),
+            // Default true for local; set ALLOW_DEV_LICENSE=false on Railway/production
             allow_dev_license: env::var("ALLOW_DEV_LICENSE")
                 .map(|v| v == "true" || v == "1")
                 .unwrap_or(true),
@@ -35,5 +40,19 @@ impl Config {
                 .and_then(|v| v.parse().ok())
                 .unwrap_or(200),
         })
+    }
+}
+
+/** Supabase (and most cloud Postgres) require TLS. */
+fn normalize_database_url(url: String) -> String {
+    let needs_ssl = url.contains("supabase.co") || url.contains("supabase.com");
+    if needs_ssl && !url.contains("sslmode=") {
+        if url.contains('?') {
+            format!("{url}&sslmode=require")
+        } else {
+            format!("{url}?sslmode=require")
+        }
+    } else {
+        url
     }
 }
