@@ -9,6 +9,7 @@ use crate::{config::Config, routes::AppState};
 use anyhow::Context;
 use sqlx::postgres::PgPoolOptions;
 use std::net::SocketAddr;
+use std::time::Duration;
 use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
@@ -20,15 +21,44 @@ async fn main() -> anyhow::Result<()> {
         .init();
 
     let config = Config::from_env()?;
-    tracing::info!(
-        "Connecting to database (host redacted)…"
-    );
-    let pool = PgPoolOptions::new()
-        .max_connections(10)
-        .acquire_timeout(std::time::Duration::from_secs(30))
-        .connect(&config.database_url)
-        .await
-        .context("connect postgres (check DATABASE_URL / sslmode=require for Supabase)")?;
+
+    // Railway injects PORT; always listen on all interfaces in cloud.
+    let host = if std::env::var("RAILWAY_ENVIRONMENT").is_ok()
+        || std::env::var("RAILWAY_PROJECT_ID").is_ok()
+    {
+        "0.0.0.0".to_string()
+    } else {
+        config.host.clone()
+    };
+    let port = config.port;
+    let addr: SocketAddr = format!("{host}:{port}")
+        .parse()
+        .context("invalid HOST/PORT")?;
+
+    tracing::info!("PORT={port} — connecting to database…");
+    log_db_target(&config.database_url);
+
+    let pool = match tokio::time::timeout(
+        Duration::from_secs(25),
+        PgPoolOptions::new()
+            .max_connections(5)
+            .acquire_timeout(Duration::from_secs(10))
+            .connect(&config.database_url),
+    )
+    .await
+    {
+        Ok(Ok(pool)) => pool,
+        Ok(Err(err)) => {
+            anyhow::bail!(
+                "Database connection failed: {err:#}. Check Railway Variable DATABASE_URL (Supabase URI + ?sslmode=require). Prefer the Session pooler URI from Supabase."
+            );
+        }
+        Err(_) => {
+            anyhow::bail!(
+                "Database connection timed out after 25s. Use Supabase Pooler URI (port 6543) if direct DB (5432) is unreachable from Railway."
+            );
+        }
+    };
 
     sqlx::migrate!("./migrations")
         .run(&pool)
@@ -37,7 +67,7 @@ async fn main() -> anyhow::Result<()> {
     tracing::info!("Migrations OK");
 
     let http = reqwest::Client::builder()
-        .timeout(std::time::Duration::from_secs(45))
+        .timeout(Duration::from_secs(45))
         .build()?;
 
     let state = AppState {
@@ -47,10 +77,23 @@ async fn main() -> anyhow::Result<()> {
     };
 
     let app = routes::router(state);
-    let addr: SocketAddr = format!("{}:{}", config.host, config.port).parse()?;
-    tracing::info!("Ranasi API listening on http://{addr}");
 
-    let listener = tokio::net::TcpListener::bind(addr).await?;
+    tracing::info!("Ranasi API listening on http://{addr}");
+    let listener = tokio::net::TcpListener::bind(addr)
+        .await
+        .with_context(|| format!("bind {addr}"))?;
+
+    // Respond to Railway healthchecks as soon as we are listening.
     axum::serve(listener, app).await?;
     Ok(())
+}
+
+fn log_db_target(url: &str) {
+    // Log host only — never password
+    if let Some(after_at) = url.split('@').nth(1) {
+        let host = after_at.split('/').next().unwrap_or(after_at);
+        tracing::info!("DATABASE host={host}");
+    } else {
+        tracing::warn!("DATABASE_URL present but could not parse host");
+    }
 }

@@ -4,8 +4,7 @@ dockerfilePath = "Dockerfile"
 watchPatterns = ["**"]
 
 [deploy]
-healthcheckPath = "/health"
-# Supabase connect + migrations can take >60s on cold start
-healthcheckTimeout = 300
+# Use TCP port check only (HTTP /health can race migrations).
+# App still exposes GET /health for manual checks.
 restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 5
+restartPolicyMaxRetries = 8

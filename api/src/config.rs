@@ -55,15 +55,22 @@ impl Config {
 }
 
 /** Supabase (and most cloud Postgres) require TLS. */
-fn normalize_database_url(url: String) -> String {
+fn normalize_database_url(mut url: String) -> String {
     let needs_ssl = url.contains("supabase.co") || url.contains("supabase.com");
     if needs_ssl && !url.contains("sslmode=") {
-        if url.contains('?') {
+        url = if url.contains('?') {
             format!("{url}&sslmode=require")
         } else {
             format!("{url}?sslmode=require")
-        }
-    } else {
-        url
+        };
     }
+    // Help drivers fail faster instead of hanging Railway healthchecks
+    if !url.contains("connect_timeout=") {
+        url = if url.contains('?') {
+            format!("{url}&connect_timeout=15")
+        } else {
+            format!("{url}?connect_timeout=15")
+        };
+    }
+    url
 }
