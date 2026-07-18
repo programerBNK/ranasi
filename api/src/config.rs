@@ -27,7 +27,7 @@ impl Config {
         let database_url = normalize_database_url(if raw_db.trim().is_empty() {
             "postgres://ranasi:ranasi@127.0.0.1:5433/ranasi".into()
         } else {
-            raw_db
+            raw_db.trim().to_string()
         });
 
         Ok(Self {
@@ -55,22 +55,61 @@ impl Config {
 }
 
 /** Supabase (and most cloud Postgres) require TLS. */
-fn normalize_database_url(mut url: String) -> String {
-    let needs_ssl = url.contains("supabase.co") || url.contains("supabase.com");
-    if needs_ssl && !url.contains("sslmode=") {
-        url = if url.contains('?') {
-            format!("{url}&sslmode=require")
-        } else {
-            format!("{url}?sslmode=require")
-        };
+fn normalize_database_url(url: String) -> String {
+    // Railway UI / paste often leaves trailing spaces → sslmode "require " fails
+    let url = url.trim().trim_matches(|c| c == '\u{00a0}' || c == '\r' || c == '\n');
+    let (base, query) = match url.split_once('?') {
+        Some((b, q)) => (b.to_string(), Some(q)),
+        None => (url.to_string(), None),
+    };
+
+    let needs_ssl = base.contains("supabase.co") || base.contains("supabase.com");
+    let mut params: Vec<(String, String)> = Vec::new();
+    if let Some(q) = query {
+        for part in q.split('&') {
+            if part.is_empty() {
+                continue;
+            }
+            let (k, v) = match part.split_once('=') {
+                Some((k, v)) => (k.trim(), v.trim()),
+                None => (part.trim(), ""),
+            };
+            if k.is_empty() {
+                continue;
+            }
+            // sqlx warns / ignores this; keep URL clean
+            if k.eq_ignore_ascii_case("connect_timeout") {
+                continue;
+            }
+            params.push((k.to_string(), v.to_string()));
+        }
     }
-    // Help drivers fail faster instead of hanging Railway healthchecks
-    if !url.contains("connect_timeout=") {
-        url = if url.contains('?') {
-            format!("{url}&connect_timeout=15")
-        } else {
-            format!("{url}?connect_timeout=15")
-        };
+
+    let has_ssl = params.iter().any(|(k, _)| k.eq_ignore_ascii_case("sslmode"));
+    if needs_ssl && !has_ssl {
+        params.push(("sslmode".into(), "require".into()));
+    } else {
+        for (k, v) in params.iter_mut() {
+            if k.eq_ignore_ascii_case("sslmode") {
+                *v = v.trim().to_string();
+            }
+        }
     }
-    url
+
+    if params.is_empty() {
+        base
+    } else {
+        let q = params
+            .into_iter()
+            .map(|(k, v)| {
+                if v.is_empty() {
+                    k
+                } else {
+                    format!("{k}={v}")
+                }
+            })
+            .collect::<Vec<_>>()
+            .join("&");
+        format!("{base}?{q}")
+    }
 }
