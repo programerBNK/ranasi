@@ -3,12 +3,7 @@ use crate::{
     error::{AppError, AppResult},
     routes::AppState,
 };
-use axum::{
-    Json,
-    body::Bytes,
-    extract::State,
-    http::HeaderMap,
-};
+use axum::{body::Bytes, extract::State, http::HeaderMap, Json};
 use chrono::{DateTime, Utc};
 use hmac::{Hmac, Mac};
 use serde_json::Value;
@@ -22,13 +17,15 @@ pub async fn lemonsqueezy(
     headers: HeaderMap,
     body: Bytes,
 ) -> AppResult<Json<Value>> {
+    let pool = state.pool()?;
+
     if let Some(secret) = state.config.lemonsqueezy_webhook_secret.as_ref() {
         let signature = headers
             .get("x-signature")
             .and_then(|v| v.to_str().ok())
             .unwrap_or("");
-        let mut mac = HmacSha256::new_from_slice(secret.as_bytes())
-            .map_err(|e| AppError::Other(e.into()))?;
+        let mut mac =
+            HmacSha256::new_from_slice(secret.as_bytes()).map_err(|e| AppError::Other(e.into()))?;
         mac.update(&body);
         let expected = hex::encode(mac.finalize().into_bytes());
         if signature != expected {
@@ -76,7 +73,7 @@ pub async fn lemonsqueezy(
                 .unwrap_or(0) as i32;
 
             db::upsert_license(
-                &state.pool,
+                pool,
                 key,
                 status,
                 email,

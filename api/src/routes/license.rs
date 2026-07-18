@@ -31,6 +31,7 @@ pub async fn activate(
     if key.is_empty() {
         return Err(AppError::BadRequest("Missing licenseKey".into()));
     }
+    let pool = state.pool()?;
     let instance_name = body.instance_name.unwrap_or_else(|| "Ranasi".into());
 
     if let Some(dev_key) = state
@@ -61,7 +62,7 @@ pub async fn activate(
             let email = payload.meta.as_ref().and_then(|m| m.customer_email.clone());
 
             db::upsert_license(
-                &state.pool,
+                pool,
                 &key,
                 lk.and_then(|k| k.status.as_deref()).unwrap_or("active"),
                 email.as_deref(),
@@ -89,15 +90,15 @@ pub async fn activate(
                     .bind(uuid)
                     .bind(&key)
                     .bind(&instance_name)
-                    .execute(&state.pool)
+                    .execute(pool)
                     .await;
                     Some(id)
                 } else {
-                    let local = db::create_instance(&state.pool, &key, &instance_name).await?;
+                    let local = db::create_instance(pool, &key, &instance_name).await?;
                     Some(local.to_string())
                 }
             } else {
-                let local = db::create_instance(&state.pool, &key, &instance_name).await?;
+                let local = db::create_instance(pool, &key, &instance_name).await?;
                 Some(local.to_string())
             };
 
@@ -126,6 +127,7 @@ pub async fn validate(
     if key.is_empty() {
         return Err(AppError::BadRequest("Missing licenseKey".into()));
     }
+    let pool = state.pool()?;
 
     if let Some(dev_key) = state
         .config
@@ -144,7 +146,7 @@ pub async fn validate(
         }));
     }
 
-    if let Some(license) = db::get_license(&state.pool, &key).await? {
+    if let Some(license) = db::get_license(pool, &key).await? {
         if !db::is_license_active(&license) {
             return Ok(Json(LicenseResponse {
                 valid: false,
@@ -157,7 +159,7 @@ pub async fn validate(
         }
         if let Some(ref id) = body.instance_id {
             if let Ok(uuid) = Uuid::parse_str(id) {
-                let _ = db::touch_instance(&state.pool, uuid).await;
+                let _ = db::touch_instance(pool, uuid).await;
             }
         }
         return Ok(Json(LicenseResponse {
@@ -177,7 +179,7 @@ pub async fn validate(
             let expires = parse_expires(lk.and_then(|k| k.expires_at.as_deref()));
             let email = payload.meta.as_ref().and_then(|m| m.customer_email.clone());
             db::upsert_license(
-                &state.pool,
+                pool,
                 &key,
                 lk.and_then(|k| k.status.as_deref()).unwrap_or("active"),
                 email.as_deref(),
@@ -226,6 +228,7 @@ pub async fn deactivate(
 ) -> AppResult<Json<LicenseResponse>> {
     let key = body.license_key.trim().to_string();
     let instance_id = body.instance_id.trim().to_string();
+    let pool = state.pool()?;
 
     if let Some(dev_key) = state
         .config
@@ -234,7 +237,7 @@ pub async fn deactivate(
         .flatten()
     {
         if let Ok(uuid) = Uuid::parse_str(&instance_id) {
-            let _ = db::delete_instance(&state.pool, uuid, dev_key).await;
+            let _ = db::delete_instance(pool, uuid, dev_key).await;
         }
         return Ok(Json(LicenseResponse {
             valid: true,
@@ -248,7 +251,7 @@ pub async fn deactivate(
 
     let _ = lemon::deactivate(&state.http, &key, &instance_id).await;
     if let Ok(uuid) = Uuid::parse_str(&instance_id) {
-        db::delete_instance(&state.pool, uuid, &key).await?;
+        db::delete_instance(pool, uuid, &key).await?;
     }
 
     Ok(Json(LicenseResponse {
@@ -266,8 +269,9 @@ async fn activate_dev(
     key: &str,
     instance_name: &str,
 ) -> AppResult<LicenseResponse> {
+    let pool = state.pool()?;
     let license = ensure_dev_license(state, key).await?;
-    let id = db::create_instance(&state.pool, key, instance_name).await?;
+    let id = db::create_instance(pool, key, instance_name).await?;
     Ok(LicenseResponse {
         valid: true,
         error: None,
@@ -283,7 +287,8 @@ async fn activate_local(
     key: &str,
     instance_name: &str,
 ) -> AppResult<Json<LicenseResponse>> {
-    let Some(license) = db::get_license(&state.pool, key).await? else {
+    let pool = state.pool()?;
+    let Some(license) = db::get_license(pool, key).await? else {
         return Ok(Json(LicenseResponse {
             valid: false,
             error: Some("License not found. Complete checkout first.".into()),
@@ -316,7 +321,7 @@ async fn activate_local(
         }));
     }
 
-    let id = db::create_instance(&state.pool, key, instance_name).await?;
+    let id = db::create_instance(pool, key, instance_name).await?;
     Ok(Json(LicenseResponse {
         valid: true,
         error: None,
@@ -328,9 +333,10 @@ async fn activate_local(
 }
 
 async fn ensure_dev_license(state: &AppState, key: &str) -> AppResult<crate::models::License> {
+    let pool = state.pool()?;
     let expires = Utc::now() + Duration::days(365);
     Ok(db::upsert_license(
-        &state.pool,
+        pool,
         key,
         "active",
         Some("dev@ranasi.local"),

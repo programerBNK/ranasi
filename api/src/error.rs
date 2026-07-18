@@ -1,7 +1,7 @@
 use axum::{
-    Json,
     http::StatusCode,
     response::{IntoResponse, Response},
+    Json,
 };
 use serde_json::json;
 
@@ -17,6 +17,8 @@ pub enum AppError {
     NotFound(String),
     #[error("{0}")]
     TooManyRequests(String),
+    #[error("{0}")]
+    ServiceUnavailable(String),
     #[error(transparent)]
     Other(#[from] anyhow::Error),
     #[error(transparent)]
@@ -33,12 +35,10 @@ impl IntoResponse for AppError {
             AppError::Forbidden(m) => (StatusCode::FORBIDDEN, m.clone()),
             AppError::NotFound(m) => (StatusCode::NOT_FOUND, m.clone()),
             AppError::TooManyRequests(m) => (StatusCode::TOO_MANY_REQUESTS, m.clone()),
+            AppError::ServiceUnavailable(m) => (StatusCode::SERVICE_UNAVAILABLE, m.clone()),
             AppError::Sqlx(e) => {
                 tracing::error!("db error: {e}");
-                (
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    "Database error".into(),
-                )
+                (StatusCode::INTERNAL_SERVER_ERROR, "Database error".into())
             }
             AppError::Reqwest(e) => {
                 tracing::error!("http error: {e}");
@@ -53,7 +53,11 @@ impl IntoResponse for AppError {
             }
         };
 
-        (status, Json(json!({ "valid": false, "ok": false, "error": msg }))).into_response()
+        (
+            status,
+            Json(json!({ "valid": false, "ok": false, "error": msg })),
+        )
+            .into_response()
     }
 }
 

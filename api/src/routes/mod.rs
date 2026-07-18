@@ -3,22 +3,34 @@ pub mod health;
 pub mod license;
 pub mod webhook;
 
-use crate::config::Config;
+use crate::{
+    config::Config,
+    error::{AppError, AppResult},
+};
 use axum::{
-    Router,
     routing::{get, post},
+    Router,
 };
 use reqwest::Client;
 use sqlx::PgPool;
 use std::sync::Arc;
+use tokio::sync::OnceCell;
 use tower_http::cors::{Any, CorsLayer};
 use tower_http::trace::TraceLayer;
 
 #[derive(Clone)]
 pub struct AppState {
-    pub pool: PgPool,
+    pub pool: Arc<OnceCell<PgPool>>,
     pub config: Config,
     pub http: Client,
+}
+
+impl AppState {
+    pub fn pool(&self) -> AppResult<&PgPool> {
+        self.pool
+            .get()
+            .ok_or_else(|| AppError::ServiceUnavailable("Database is starting".into()))
+    }
 }
 
 pub fn router(state: AppState) -> Router {

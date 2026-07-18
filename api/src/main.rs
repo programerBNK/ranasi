@@ -8,8 +8,8 @@ mod services;
 use crate::{config::Config, routes::AppState};
 use anyhow::Context;
 use sqlx::postgres::PgPoolOptions;
-use std::net::SocketAddr;
-use std::time::Duration;
+use std::{net::SocketAddr, sync::Arc, time::Duration};
+use tokio::sync::OnceCell;
 use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
@@ -35,15 +35,46 @@ async fn main() -> anyhow::Result<()> {
         .parse()
         .context("invalid HOST/PORT")?;
 
-    tracing::info!("PORT={port} — connecting to database…");
-    log_db_target(&config.database_url);
+    let listener = tokio::net::TcpListener::bind(addr)
+        .await
+        .with_context(|| format!("bind {addr}"))?;
+    tracing::info!("Ranasi API listening on http://{addr}");
+
+    let http = reqwest::Client::builder()
+        .timeout(Duration::from_secs(45))
+        .build()?;
+    let pool = Arc::new(OnceCell::new());
+
+    let state = AppState {
+        pool: pool.clone(),
+        config: config.clone(),
+        http,
+    };
+    let app = routes::router(state);
+
+    tokio::spawn(async move {
+        if let Err(err) = initialize_database(&config.database_url, &pool).await {
+            tracing::error!("Database initialization failed: {err:#}");
+        }
+    });
+
+    axum::serve(listener, app).await?;
+    Ok(())
+}
+
+async fn initialize_database(
+    database_url: &str,
+    pool_cell: &OnceCell<sqlx::PgPool>,
+) -> anyhow::Result<()> {
+    tracing::info!("Connecting to database…");
+    log_db_target(database_url);
 
     let pool = match tokio::time::timeout(
         Duration::from_secs(25),
         PgPoolOptions::new()
             .max_connections(5)
             .acquire_timeout(Duration::from_secs(10))
-            .connect(&config.database_url),
+            .connect(database_url),
     )
     .await
     {
@@ -64,27 +95,10 @@ async fn main() -> anyhow::Result<()> {
         .run(&pool)
         .await
         .context("run migrations")?;
-    tracing::info!("Migrations OK");
-
-    let http = reqwest::Client::builder()
-        .timeout(Duration::from_secs(45))
-        .build()?;
-
-    let state = AppState {
-        pool,
-        config: config.clone(),
-        http,
-    };
-
-    let app = routes::router(state);
-
-    tracing::info!("Ranasi API listening on http://{addr}");
-    let listener = tokio::net::TcpListener::bind(addr)
-        .await
-        .with_context(|| format!("bind {addr}"))?;
-
-    // Respond to Railway healthchecks as soon as we are listening.
-    axum::serve(listener, app).await?;
+    pool_cell
+        .set(pool)
+        .map_err(|_| anyhow::anyhow!("database pool already initialized"))?;
+    tracing::info!("Migrations OK; API ready");
     Ok(())
 }
 

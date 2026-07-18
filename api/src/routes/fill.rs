@@ -44,6 +44,7 @@ pub async fn fill(
     if body.fields.is_empty() {
         return Err(AppError::BadRequest("No fields".into()));
     }
+    let pool = state.pool()?;
 
     let dev_key = state
         .config
@@ -54,7 +55,7 @@ pub async fn fill(
 
     let license = if is_dev {
         db::upsert_license(
-            &state.pool,
+            pool,
             dev_key.expect("checked above"),
             "active",
             Some("dev@ranasi.local"),
@@ -67,7 +68,7 @@ pub async fn fill(
         )
         .await?
     } else {
-        db::get_license(&state.pool, &key)
+        db::get_license(pool, &key)
             .await?
             .ok_or_else(|| AppError::Forbidden("Pro license required".into()))?
     };
@@ -78,12 +79,11 @@ pub async fn fill(
 
     if let Some(ref id) = body.instance_id {
         if let Ok(uuid) = Uuid::parse_str(id) {
-            let _ = db::touch_instance(&state.pool, uuid).await;
+            let _ = db::touch_instance(pool, uuid).await;
         }
     }
 
-    let usage =
-        db::bump_fill_usage(&state.pool, &license.key, state.config.fill_daily_limit).await?;
+    let usage = db::bump_fill_usage(pool, &license.key, state.config.fill_daily_limit).await?;
     if usage > state.config.fill_daily_limit {
         return Err(AppError::TooManyRequests(format!(
             "Daily AI fill limit ({}) reached",
