@@ -1,0 +1,179 @@
+.hero {
+  max-width: 640px;
+  margin-bottom: 36px;
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  margin: 0 0 14px;
+}
+
+.lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.08rem;
+  line-height: 1.55;
+  max-width: 48ch;
+}
+
+.payCard {
+  border-radius: 22px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  background: var(--surface);
+  padding: 28px;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.28);
+  animation: rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.priceRow h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+}
+
+.muted {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.price {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.price span {
+  font-size: 1rem;
+  color: var(--muted);
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.perks {
+  list-style: none;
+  margin: 18px 0 22px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.perks li::before {
+  content: "– ";
+  color: var(--accent);
+}
+
+.hint {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.setupBox {
+  margin-top: 8px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px dashed var(--line);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.setupBox strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+.setupBox p {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.code {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text);
+  font-size: 0.78rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.setupSteps {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  display: grid;
+  gap: 8px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.setupSteps a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.setupSteps code {
+  font-size: 0.8em;
+}
+
+.flow {
+  margin-top: 56px;
+  animation: rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.flow h2 {
+  font-family: var(--font-display);
+  margin: 0 0 20px;
+  font-size: 1.6rem;
+}
+
+.flow a {
+  color: var(--accent);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .priceRow {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "auto-flow",
+  "displayName": "AutoFlow",
+  "version": "0.1.0",
+  "description": "Smart AI Browser Assistant — desktop new tab with one-click autofill",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:ext": "wxt",
+    "dev:web": "npm run dev --prefix web",
+    "dev:api": "cargo run --manifest-path api/Cargo.toml",
+    "dev:db": "docker compose -f api/docker-compose.yml up -d",
+    "build": "wxt build",
+    "build:ext": "wxt build",
+    "build:web": "npm run build --prefix web",
+    "build:api": "cargo build --release --manifest-path api/Cargo.toml",
+    "zip": "wxt zip",
+    "postinstall": "wxt prepare"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.326",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@wxt-dev/module-react": "^1.1.3",
+    "typescript": "^5.8.3",
+    "wxt": "^0.20.7"
+  }
+}

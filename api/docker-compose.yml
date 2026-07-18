@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: autoflow-pg
+    environment:
+      POSTGRES_USER: autoflow
+      POSTGRES_PASSWORD: autoflow
+      POSTGRES_DB: autoflow
+    ports:
+      - "5433:5432"
+    volumes:
+      - autoflow_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U autoflow -d autoflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  autoflow_pg:

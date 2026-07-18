@@ -1,0 +1,10 @@
+node_modules
+.output
+.wxt
+dist
+*.local
+.env.local
+web/.env.local
+api/.env
+api/target
+.DS_Store
