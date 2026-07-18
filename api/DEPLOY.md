@@ -56,27 +56,30 @@ Railway sets `PORT` automatically — the app already reads it.
 
 ### C. Public URL
 
-1. Railway → Service → **Settings → Networking → Generate Domain**
-2. Health check: `https://YOUR-APP.up.railway.app/health` → `{"ok":true,"service":"ranasi-api"}`
+1. Railway → Service → **Settings → Networking → Generate Domain** (or attach custom domain)
+2. Production API: `https://api.ranasi.com`
+3. Health check: `https://api.ranasi.com/health` → `{"ok":true,"service":"ranasi-api"}`
 
-### D. Point the rest of the stack at Railway
+### D. Point the rest of the stack at the API
 
 **Extension** (`.env.production` at repo root):
 
 ```env
-WXT_API_BASE=https://YOUR-APP.up.railway.app
+WXT_API_BASE=https://api.ranasi.com
+WXT_CHECKOUT_URL=https://www.ranasi.com/pro
 ```
 
 Then `npm run zip` / publish.
 
-**Web** (`web/.env.local` or Vercel env):
+**Web** (Vercel env or `web/.env.production`):
 
 ```env
-NEXT_PUBLIC_API_URL=https://YOUR-APP.up.railway.app
+NEXT_PUBLIC_APP_URL=https://www.ranasi.com
+NEXT_PUBLIC_API_URL=https://api.ranasi.com
 ```
 
 **Lemon Squeezy webhook** →  
-`https://YOUR-APP.up.railway.app/v1/webhooks/lemonsqueezy`
+`https://api.ranasi.com/v1/webhooks/lemonsqueezy`
 
 ## 3) Security checklist
 
