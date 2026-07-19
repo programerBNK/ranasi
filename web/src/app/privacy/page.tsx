@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SiteFooter, SiteNav } from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — Ranasi",
@@ -10,19 +10,20 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <main className="shell">
-      <nav className="nav">
-        <Link className="logo" href="/">
-          Ranasi
-        </Link>
-        <div className="nav-links">
-          <Link href="/pro">Get Pro</Link>
-          <Link href="/activate">Activate</Link>
-        </div>
-      </nav>
+      <SiteNav
+        links={[
+          { href: "/pro", label: "Get Pro" },
+          { href: "/activate", label: "Activate" },
+        ]}
+      />
 
-      <section className="section" style={{ marginTop: 0 }}>
+      <section className="section" style={{ marginTop: 12 }}>
+        <p className="section-label">Legal</p>
         <h2>Privacy Policy</h2>
-        <p>Last updated: July 19, 2026 · Applies to the Ranasi Chrome extension and website.</p>
+        <p className="section-lead">
+          Last updated: July 19, 2026. Applies to the Ranasi Chrome extension
+          and website.
+        </p>
       </section>
 
       <div className="panel" style={{ display: "grid", gap: 18 }}>
@@ -100,6 +101,8 @@ export default function PrivacyPage() {
           </p>
         </div>
       </div>
+
+      <SiteFooter />
     </main>
   );
 }

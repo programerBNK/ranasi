@@ -1,64 +1,69 @@
-import {
-  extensionStoreUrl,
-  isExtensionPublished,
-} from "@/lib/extension";
 import Link from "next/link";
+import { SiteFooter, SiteNav, installHref } from "@/components/SiteChrome";
 
 export const metadata = {
   title: "Payment successful — Ranasi Pro",
 };
 
 export default function SuccessPage() {
-  const storeUrl = extensionStoreUrl();
-  const published = isExtensionPublished();
+  const store = installHref();
 
   return (
     <main className="shell">
-      <nav className="nav">
-        <Link className="logo" href="/">Ranasi</Link>
-        <div className="nav-links">
-          <Link href="/activate">Activate</Link>
-          <Link href="/#pro-flow">After-payment guide</Link>
-        </div>
-      </nav>
+      <SiteNav
+        links={[
+          { href: "/activate", label: "Activate" },
+          { href: "/#pro-flow", label: "Guide" },
+        ]}
+      />
+
+      <section className="section" style={{ marginTop: 12 }}>
+        <p className="section-label">Thank you</p>
+        <h2>Payment successful</h2>
+        <p className="section-lead">
+          Complete the steps below to unlock Ranasi Pro in your browser.
+        </p>
+      </section>
 
       <div className="panel" style={{ width: "min(560px, 100%)" }}>
-        <h1>Payment successful</h1>
-        <p>
-          Thank you for upgrading to <strong>Ranasi Pro</strong>. Complete the
-          steps below to activate Pro.
-        </p>
+        <h1>Activate your purchase</h1>
         <ol className="ol">
           <li>
-            Open the <strong>Lemon Squeezy</strong> email and copy your{" "}
-            <strong>License Key</strong>.
-            <br />
-            <span style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
-              Check spam if you cannot find it.
-            </span>
+            Open your confirmation email and copy the{" "}
+            <strong>license key</strong>. Check spam if needed.
           </li>
           <li>
-            Install Ranasi from the Chrome Web Store if needed.
-            <br />
-            <span style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
-              No project download is required.
-            </span>
+            Install Ranasi from the{" "}
+            <a href={store} target="_blank" rel="noreferrer">
+              Chrome Web Store
+            </a>{" "}
+            if you have not already.
           </li>
-          <li>Open Chrome → Extensions → <strong>Ranasi</strong> → Options.</li>
-          <li>Open <strong>License</strong>, paste the key, and select <strong>Activate</strong>.</li>
-          <li>Open a new tab and use Auto-Fill — Pro is now active.</li>
+          <li>
+            Open Chrome → Extensions → <strong>Ranasi</strong> → Options.
+          </li>
+          <li>
+            Open <strong>License</strong>, paste the key, and select{" "}
+            <strong>Activate</strong>.
+          </li>
+          <li>Open a new tab and start using Pro Auto-Fill.</li>
         </ol>
-        <div className="cta-row" style={{ marginTop: 22 }}>
-          <Link className="btn btn-primary" href="/activate">Validate your key</Link>
-          {published ? (
-            <a className="btn btn-ghost" href={storeUrl} target="_blank" rel="noreferrer">
-              Open the Chrome Web Store
-            </a>
-          ) : (
-            <Link className="btn btn-ghost" href="/#install">View installation guide</Link>
-          )}
+        <div className="cta-row" style={{ marginTop: 24 }}>
+          <Link className="btn btn-primary" href="/activate">
+            Validate your key
+          </Link>
+          <a
+            className="btn btn-ghost"
+            href={store}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Chrome Web Store
+          </a>
         </div>
       </div>
+
+      <SiteFooter />
     </main>
   );
 }
