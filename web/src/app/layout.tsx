@@ -1,13 +1,25 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { detectLocale } from "@/lib/i18n/detect";
+import {
+  JsonLd,
+  organizationJsonLd,
+  softwareAppJsonLd,
+  websiteJsonLd,
+} from "@/components/JsonLd";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { SEO_KEYWORDS } from "@/lib/seo/keywords";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "Ranasi — Smart AI Browser Assistant",
-  description:
-    "Desktop new tab + one-click autofill. Free to start. Pro $10/year via license key.",
-};
+export const metadata: Metadata = buildMetadata({
+  path: "/",
+  keywords: [
+    ...SEO_KEYWORDS.slice(0, 24),
+    "Ranasi",
+    "Ranasi autofill",
+    "Ranasi Chrome extension",
+  ],
+});
 
 export default async function RootLayout({
   children,
@@ -30,7 +42,12 @@ export default async function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <JsonLd
+          data={[organizationJsonLd(), websiteJsonLd(), softwareAppJsonLd()]}
+        />
+        {children}
+      </body>
     </html>
   );
 }

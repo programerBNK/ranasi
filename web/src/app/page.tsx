@@ -95,6 +95,8 @@ export default function HomePage() {
         <h2>Empty form. One click. Done.</h2>
         <p className="section-lead">
           A short interactive preview — the same idea as Ranasi on a real page.
+          Learn more on the{" "}
+          <a href="/autofill">Chrome autofill guide</a>.
         </p>
         <AutoFillDemo />
       </section>

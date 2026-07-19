@@ -1,13 +1,23 @@
+import type { Metadata } from "next";
 import { checkoutUrl, isCheckoutConfigured } from "@/lib/checkout";
 import Link from "next/link";
 import { SiteFooter, SiteNav, installHref } from "@/components/SiteChrome";
+import { buildMetadata } from "@/lib/seo/metadata";
 import styles from "./pro.module.css";
 
-export const metadata = {
-  title: "Get Ranasi Pro — $10/year",
+export const metadata: Metadata = buildMetadata({
+  title: "Ranasi Pro — AI Autofill & Unlimited Desktop · $10/year",
   description:
-    "Pay $10/year, get a license key by email, and activate Pro in the extension.",
-};
+    "Upgrade to Ranasi Pro for Server AI form autofill, 5 profiles, 12 premium themes, and unlimited new-tab websites. $10/year with license key by email.",
+  path: "/pro",
+  keywords: [
+    "Ranasi Pro",
+    "AI form filler",
+    "chrome autofill pro",
+    "server AI autofill",
+    "unlimited new tab sites",
+  ],
+});
 
 export default function ProPage() {
   const ready = isCheckoutConfigured();
