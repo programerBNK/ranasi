@@ -8,6 +8,7 @@ import {
   DesktopPreview,
   OptionsPreview,
 } from "@/components/ProductShowcase";
+import { AutoFillDemo } from "@/components/AutoFillDemo";
 
 export default function HomePage() {
   const ready = isCheckoutConfigured();
@@ -84,6 +85,15 @@ export default function HomePage() {
           </div>
           <OptionsPreview />
         </div>
+      </section>
+
+      <section className="section" id="demo">
+        <p className="section-label">See it work</p>
+        <h2>Empty form. One click. Done.</h2>
+        <p className="section-lead">
+          A short interactive preview — the same idea as Ranasi on a real page.
+        </p>
+        <AutoFillDemo />
       </section>
 
       <section className="section" id="install">
