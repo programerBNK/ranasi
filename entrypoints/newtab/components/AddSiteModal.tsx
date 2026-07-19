@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { t } from "../../../lib/i18n";
 
 interface Props {
   onClose: () => void;
@@ -23,7 +24,7 @@ export function AddSiteModal({ onClose, onAdd }: Props) {
       await onAdd(value.trim());
       onClose();
     } catch {
-      setError("ใส่ลิงก์ไม่ถูกต้อง เช่น github.com/login");
+      setError(t("addSite.invalid"));
     } finally {
       setBusy(false);
     }
@@ -37,7 +38,7 @@ export function AddSiteModal({ onClose, onAdd }: Props) {
         onSubmit={submit}
       >
         <h2>Add website</h2>
-        <p>ใส่โดเมนหรือ path ได้ เช่น example.com หรือ example.com/jobs</p>
+        <p>{t("addSite.help")}</p>
         <input
           ref={inputRef}
           value={value}

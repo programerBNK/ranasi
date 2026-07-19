@@ -1,4 +1,5 @@
 import { checkoutUrl, isCheckoutConfigured } from "@/lib/checkout";
+import Link from "next/link";
 import {
   extensionStoreUrl,
   isExtensionPublished,
@@ -7,8 +8,7 @@ import styles from "./pro.module.css";
 
 export const metadata = {
   title: "Get Ranasi Pro — $10/year",
-  description:
-    "Pay $10/year, get a license key by email, activate in the extension.",
+  description: "Pay $10/year, get a license key by email, and activate it in the extension.",
 };
 
 export default function ProPage() {
@@ -20,22 +20,20 @@ export default function ProPage() {
   return (
     <main className="shell">
       <nav className="nav">
-        <a className="logo" href="/">
-          Ranasi
-        </a>
+        <Link className="logo" href="/">Ranasi</Link>
         <div className="nav-links">
-          <a href="/#free">ใช้ฟรี</a>
-          <a href="/#pro-flow">หลังจ่ายเงิน</a>
-          <a href="/activate">Activate</a>
+          <Link href="/#free">Use Free</Link>
+          <Link href="/#pro-flow">After payment</Link>
+          <Link href="/activate">Activate</Link>
         </div>
       </nav>
 
       <section className={styles.hero}>
         <p className={styles.eyebrow}>Ranasi Pro</p>
-        <h1>จ่าย $10/ปี → ได้รหัสทางอีเมล → ใช้งาน Pro</h1>
+        <h1>Pay $10/year → Get a key by email → Activate Pro</h1>
         <p className={styles.lead}>
-          ไม่ต้องโหลดโฟลเดอร์ใดๆ · ติดตั้งจาก Chrome Web Store · วาง License Key
-          ใน Extension Options เท่านั้น
+          Install from the Chrome Web Store and paste your license key into
+          Extension Options. No project download is required.
         </p>
       </section>
 
@@ -43,45 +41,32 @@ export default function ProPage() {
         <div className={styles.priceRow}>
           <div>
             <h2>Pro annual</h2>
-            <p className={styles.muted}>รายปี · ได้คีย์ทางอีเมลหลังชำระ</p>
+            <p className={styles.muted}>Billed yearly · License key delivered by email</p>
           </div>
-          <div className={styles.price}>
-            $10<span>/year</span>
-          </div>
+          <div className={styles.price}>$10<span>/year</span></div>
         </div>
-
         <ul className={styles.perks}>
           <li>Server AI Auto-Fill</li>
-          <li>สูงสุด 5 Profiles</li>
-          <li>12 ธีมพรีเมียม — default Noir Gold (เงาหลายมิติ)</li>
-          <li>เพิ่มเว็บบน Desktop ได้ไม่จำกัด (ฟรีจำกัด 10)</li>
-          <li>Export / Import</li>
+          <li>Up to 5 profiles</li>
+          <li>12 premium themes with Noir Gold by default</li>
+          <li>Unlimited desktop websites</li>
+          <li>Export and import</li>
         </ul>
-
         {ready ? (
           <>
-            <a
-              className="btn btn-primary"
-              href={payUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              จ่ายด้วย Lemon Squeezy — $10/ปี
+            <a className="btn btn-primary" href={payUrl} target="_blank" rel="noreferrer">
+              Pay with Lemon Squeezy — $10/year
             </a>
             <p className={styles.hint}>
-              หลังจ่ายสำเร็จ → เช็กอีเมลหา License Key → ทำตามขั้นตอนด้านล่าง
+              After payment, check your email for the license key and follow the steps below.
             </p>
           </>
         ) : (
           <div className={styles.setupBox}>
-            <strong>ช่องทางจ่ายเงินยังไม่พร้อมบนเว็บนี้</strong>
-            <p>
-              เจ้าของร้านต้องตั้งค่า Lemon Squeezy ก่อน ผู้ใช้จริงจะเห็นปุ่มจ่ายเงิน
-            </p>
+            <strong>Checkout is not available on this site yet</strong>
+            <p>The store owner must configure Lemon Squeezy before customers can pay.</p>
             <div className="cta-row" style={{ marginTop: 18 }}>
-              <a className="btn btn-ghost" href="/activate">
-                นักพัฒนา: ทดสอบด้วย RN-DEV-PRO
-              </a>
+              <Link className="btn btn-ghost" href="/activate">Developers: test with RN-DEV-PRO</Link>
             </div>
           </div>
         )}
@@ -93,59 +78,38 @@ export default function ProPage() {
       </p>
 
       <section className="section" id="after-pay">
-        <h2>หลังได้รหัสจากอีเมล — ทีละขั้นจนใช้ได้</h2>
+        <h2>Activate Pro after receiving your key</h2>
         <ol className="guide-list numbered">
           <li>
-            <strong>เปิดอีเมลจาก Lemon Squeezy</strong>
-            <span>
-              คัดลอก <strong>License Key</strong> ทั้งชุด · ถ้าไม่เจอ เช็ก Spam
-            </span>
+            <strong>Open the Lemon Squeezy email</strong>
+            <span>Copy the complete license key. Check spam if you cannot find the message.</span>
           </li>
           <li>
-            <strong>ติดตั้ง Ranasi (ถ้ายังไม่มี)</strong>
+            <strong>Install Ranasi if needed</strong>
             <span>
               {published ? (
-                <>
-                  จาก{" "}
-                  <a href={storeUrl} target="_blank" rel="noreferrer">
-                    Chrome Web Store
-                  </a>{" "}
-                  — ไม่ต้องดาวน์โหลดโฟลเดอร์
-                </>
+                <>Install it from the <a href={storeUrl} target="_blank" rel="noreferrer">Chrome Web Store</a>.</>
               ) : (
-                <>
-                  จาก Chrome Web Store (เมื่อเผยแพร่แล้ว) —{" "}
-                  <em>ผู้ใช้จริงไม่ใช้ Load unpacked / ไม่ใช้โฟลเดอร์โปรเจกต์</em>
-                </>
+                <>Install it from the Chrome Web Store when published. Regular users never need Load unpacked.</>
               )}
             </span>
           </li>
           <li>
-            <strong>เปิด Extension Options</strong>
-            <span>
-              Chrome มุมขวาบน → ไอคอนชิ้นส่วนจิ๊กซอว์ → Ranasi →{" "}
-              <strong>ตัวเลือกส่วนขยาย (Options)</strong>
-            </span>
+            <strong>Open Extension Options</strong>
+            <span>In Chrome, open Extensions → Ranasi → Options.</span>
           </li>
           <li>
-            <strong>แท็บ License → วางคีย์ → Activate</strong>
-            <span>สถานะต้องขึ้น Pro · ถ้าผิดพลาด ลองหน้า /activate ตรวจคีย์ก่อน</span>
+            <strong>Open License, paste the key, and select Activate</strong>
+            <span>The plan status should change to Pro. Use the Activate page to validate the key if needed.</span>
           </li>
           <li>
-            <strong>ใช้งาน</strong>
-            <span>
-              เปิดแท็บใหม่ → ได้ธีม <strong>Noir Gold</strong> อัตโนมัติ · เลือกได้อีก
-              11 ธีม · เพิ่มเว็บได้ไม่จำกัด · ตั้ง Profile · กด Auto-Fill with AI
-            </span>
+            <strong>Use Pro</strong>
+            <span>Open a new tab, choose a premium theme, add unlimited websites, and use Server AI Auto-Fill.</span>
           </li>
         </ol>
         <div className="cta-row">
-          <a className="btn btn-primary" href="/activate">
-            ไปหน้า Activate / ตรวจคีย์
-          </a>
-          <a className="btn btn-ghost" href="/#free">
-            ยังไม่ซื้อ — ใช้ฟรีก่อน
-          </a>
+          <Link className="btn btn-primary" href="/activate">Validate a license key</Link>
+          <Link className="btn btn-ghost" href="/#free">Use Free first</Link>
         </div>
       </section>
     </main>

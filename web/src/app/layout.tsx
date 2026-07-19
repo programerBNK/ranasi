@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { detectLocale } from "@/lib/i18n/detect";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -7,13 +9,15 @@ export const metadata: Metadata = {
     "Desktop new tab + one-click autofill. Free to start. Pro $10/year via license key.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = detectLocale((await headers()).get("accept-language"));
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

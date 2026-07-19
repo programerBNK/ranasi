@@ -2,9 +2,10 @@ import {
   extensionStoreUrl,
   isExtensionPublished,
 } from "@/lib/extension";
+import Link from "next/link";
 
 export const metadata = {
-  title: "ชำระเงินสำเร็จ — Ranasi Pro",
+  title: "Payment successful — Ranasi Pro",
 };
 
 export default function SuccessPage() {
@@ -14,67 +15,47 @@ export default function SuccessPage() {
   return (
     <main className="shell">
       <nav className="nav">
-        <a className="logo" href="/">
-          Ranasi
-        </a>
+        <Link className="logo" href="/">Ranasi</Link>
         <div className="nav-links">
-          <a href="/activate">Activate</a>
-          <a href="/#pro-flow">คู่มือหลังจ่าย</a>
+          <Link href="/activate">Activate</Link>
+          <Link href="/#pro-flow">After-payment guide</Link>
         </div>
       </nav>
 
       <div className="panel" style={{ width: "min(560px, 100%)" }}>
-        <h1>ชำระเงินสำเร็จ</h1>
+        <h1>Payment successful</h1>
         <p>
-          ขอบคุณที่อัปเกรด <strong>Ranasi Pro</strong> — ขั้นตอนถัดไปสำคัญมาก
-          ทำจนครบถึงจะใช้ Pro ได้
+          Thank you for upgrading to <strong>Ranasi Pro</strong>. Complete the
+          steps below to activate Pro.
         </p>
-
         <ol className="ol">
           <li>
-            เปิดอีเมลจาก <strong>Lemon Squeezy</strong> → คัดลอก{" "}
-            <strong>License Key</strong>
+            Open the <strong>Lemon Squeezy</strong> email and copy your{" "}
+            <strong>License Key</strong>.
             <br />
             <span style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
-              (เช็ก Spam ถ้าไม่เจอ)
+              Check spam if you cannot find it.
             </span>
           </li>
           <li>
-            ติดตั้ง Ranasi จาก Chrome Web Store ถ้ายังไม่มี
+            Install Ranasi from the Chrome Web Store if needed.
             <br />
             <span style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
-              ไม่ต้องดาวน์โหลดโฟลเดอร์ใดๆ
+              No project download is required.
             </span>
           </li>
-          <li>
-            Chrome → ไอคอนจิ๊กซอว์ → <strong>Ranasi</strong> → Options
-          </li>
-          <li>
-            แท็บ <strong>License</strong> → วางคีย์ → กด{" "}
-            <strong>Activate</strong>
-          </li>
-          <li>
-            เปิดแท็บใหม่ + ใช้ Auto-Fill บนหน้าฟอร์ม — คุณเป็น Pro แล้ว
-          </li>
+          <li>Open Chrome → Extensions → <strong>Ranasi</strong> → Options.</li>
+          <li>Open <strong>License</strong>, paste the key, and select <strong>Activate</strong>.</li>
+          <li>Open a new tab and use Auto-Fill — Pro is now active.</li>
         </ol>
-
         <div className="cta-row" style={{ marginTop: 22 }}>
-          <a className="btn btn-primary" href="/activate">
-            ตรวจคีย์ที่นี่ก่อน
-          </a>
+          <Link className="btn btn-primary" href="/activate">Validate your key</Link>
           {published ? (
-            <a
-              className="btn btn-ghost"
-              href={storeUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              เปิด Chrome Web Store
+            <a className="btn btn-ghost" href={storeUrl} target="_blank" rel="noreferrer">
+              Open the Chrome Web Store
             </a>
           ) : (
-            <a className="btn btn-ghost" href="/#install">
-              ดูวิธีติดตั้ง
-            </a>
+            <Link className="btn btn-ghost" href="/#install">View installation guide</Link>
           )}
         </div>
       </div>

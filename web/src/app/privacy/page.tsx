@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — Ranasi",
@@ -10,12 +11,12 @@ export default function PrivacyPage() {
   return (
     <main className="shell">
       <nav className="nav">
-        <a className="logo" href="/">
+        <Link className="logo" href="/">
           Ranasi
-        </a>
+        </Link>
         <div className="nav-links">
-          <a href="/pro">Get Pro</a>
-          <a href="/activate">Activate</a>
+          <Link href="/pro">Get Pro</Link>
+          <Link href="/activate">Activate</Link>
         </div>
       </nav>
 

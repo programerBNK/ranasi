@@ -14,9 +14,9 @@ export default defineConfig({
     },
   },
   manifest: {
-    name: "Ranasi",
-    description:
-      "Smart AI Browser Assistant — one-click autofill from your local profile",
+    default_locale: "en",
+    name: "__MSG_extName__",
+    description: "__MSG_extDescription__",
     permissions: ["storage", "history", "tabs"],
     host_permissions: [
       "http://*/*",

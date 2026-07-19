@@ -17,6 +17,7 @@ import type {
   ProfileStatusRequest,
   ProfileStatusResponse,
 } from "../lib/messages";
+import { t } from "../lib/i18n";
 
 export default defineBackground(() => {
   chrome.runtime.onInstalled.addListener(async (details) => {
@@ -85,7 +86,7 @@ async function runAutoFill(message: FillRequest): Promise<FillResponse> {
       mode: "heuristic",
       filled: 0,
       needsProfile: true,
-      error: "ตั้งค่า Profile ก่อนใน Extension Options",
+      error: t("background.profileRequired"),
     };
   }
 
@@ -145,8 +146,8 @@ async function runAutoFill(message: FillRequest): Promise<FillResponse> {
     error:
       Object.keys(map).length === 0
         ? pro
-          ? "ไม่พบช่องที่ตรงกับ Profile"
-          : "ไม่พบช่องที่ตรง — อัปเกรด Pro เพื่อ Server AI fill"
+          ? t("background.noMatch")
+          : t("background.noMatchFree")
         : undefined,
   };
 }

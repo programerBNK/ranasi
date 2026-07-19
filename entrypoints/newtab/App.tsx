@@ -50,6 +50,7 @@ import { AddTile, SiteTile } from "./components/SiteTile";
 import { ContextMenu } from "./components/ContextMenu";
 import { AddSiteModal } from "./components/AddSiteModal";
 import { ThemePicker } from "./components/ThemePicker";
+import { t } from "../../lib/i18n";
 
 export function App() {
   const [state, setState] = useState<DesktopState | null>(null);
@@ -109,7 +110,7 @@ export function App() {
 
   async function onThemeClick(themeId: ThemeId, requiresPro?: boolean) {
     if (requiresPro && !pro) {
-      showToast(`ธีมนี้เป็น Pro — ${PRO_PRICE_LABEL}`);
+      showToast(t("newtab.proTheme", { price: PRO_PRICE_LABEL }));
       window.open(CHECKOUT_URL, "_blank");
       return;
     }
@@ -119,7 +120,7 @@ export function App() {
 
   async function onExportProfile() {
     if (!pro) {
-      showToast(`Export เป็น Pro — ${PRO_PRICE_LABEL}`);
+      showToast(t("newtab.proExport", { price: PRO_PRICE_LABEL }));
       chrome.runtime.openOptionsPage();
       return;
     }
@@ -139,7 +140,7 @@ export function App() {
   function tryOpenAdd() {
     if (!state) return;
     if (!pro && countVisibleSites(state) >= FREE_SITE_LIMIT) {
-      showToast(`ฟรีเพิ่มได้ ${FREE_SITE_LIMIT} เว็บ — Pro ไม่จำกัด`);
+      showToast(t("newtab.freeSiteLimit", { limit: FREE_SITE_LIMIT }));
       window.open(CHECKOUT_URL, "_blank");
       return;
     }
@@ -222,8 +223,8 @@ export function App() {
           <h1 className="brand__name">Ranasi</h1>
           <p className="brand__tag">
             {pro
-              ? "12 ธีมพรีเมียม · เพิ่มเว็บได้ไม่จำกัด · ดูลึก มีมิติ"
-              : `ฟรี: ธีม Mint/Slate · เพิ่มเว็บได้ ${FREE_SITE_LIMIT} รายการ`}
+              ? t("newtab.proTagline")
+              : t("newtab.freeTagline", { limit: FREE_SITE_LIMIT })}
           </p>
           {profilePct < 50 && (
             <button
@@ -232,7 +233,7 @@ export function App() {
               style={{ marginTop: 10 }}
               onClick={() => chrome.runtime.openOptionsPage()}
             >
-              ตั้งค่า Profile → เริ่ม Auto-Fill
+              {t("newtab.setupProfile")}
             </button>
           )}
         </div>
@@ -242,8 +243,11 @@ export function App() {
           <div className="clock__date">{date}</div>
           <div className="meta-line">
             {pro
-              ? `${visibleCount} เว็บ · ไม่จำกัด`
-              : `${visibleCount}/${FREE_SITE_LIMIT} เว็บ`}
+              ? t("newtab.siteCountUnlimited", { count: visibleCount })
+              : t("newtab.siteCountLimited", {
+                  count: visibleCount,
+                  limit: FREE_SITE_LIMIT,
+                })}
           </div>
           <div className="toolbar">
             <button
@@ -294,9 +298,9 @@ export function App() {
       <div className="desktop__grid-wrap">
         {sites.length === 0 ? (
           <div className="empty">
-            <strong>ยังไม่มีเว็บบน Desktop</strong>
-            กด + เพื่อเพิ่ม
-            {!pro && ` · ฟรีได้สูงสุด ${FREE_SITE_LIMIT} เว็บ`}
+            <strong>{t("newtab.emptyTitle")}</strong>
+            {t("newtab.emptyAction")}
+            {!pro && t("newtab.emptyFreeLimit", { limit: FREE_SITE_LIMIT })}
           </div>
         ) : (
           <DndContext
@@ -353,7 +357,7 @@ export function App() {
               setState(await addCustomSite(domain));
             } catch (err) {
               if (err instanceof Error && err.message === "SITE_LIMIT") {
-                showToast(`ฟรีเพิ่มได้ ${FREE_SITE_LIMIT} เว็บ — Pro ไม่จำกัด`);
+                showToast(t("newtab.freeSiteLimit", { limit: FREE_SITE_LIMIT }));
                 window.open(CHECKOUT_URL, "_blank");
                 return;
               }

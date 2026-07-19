@@ -1,3 +1,5 @@
+import { t } from "./i18n";
+
 export const PROFILE_STORAGE_KEY = "autoflow_profiles_v1";
 export const SETTINGS_STORAGE_KEY = "autoflow_settings_v1";
 
@@ -144,8 +146,8 @@ export async function addProfile(isPro: boolean): Promise<ProfileStore> {
   if (store.profiles.length >= limit) {
     throw new Error(
       isPro
-        ? `Pro รองรับสูงสุด ${PRO_PROFILE_LIMIT} โปรไฟล์`
-        : "Free ใช้ได้ 1 โปรไฟล์ — อัปเกรด Pro เพื่อเพิ่ม",
+        ? t("profile.proLimit", { limit: PRO_PROFILE_LIMIT })
+        : t("profile.freeLimit"),
     );
   }
   const p = emptyProfile(`Profile ${store.profiles.length + 1}`);
@@ -160,7 +162,7 @@ export async function addProfile(isPro: boolean): Promise<ProfileStore> {
 export async function deleteProfile(id: string): Promise<ProfileStore> {
   const store = await loadProfileStore();
   if (store.profiles.length <= 1) {
-    throw new Error("ต้องเหลืออย่างน้อย 1 โปรไฟล์");
+    throw new Error(t("profile.keepOne"));
   }
   const profiles = store.profiles.filter((p) => p.id !== id);
   const activeId =

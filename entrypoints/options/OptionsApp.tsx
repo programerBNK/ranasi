@@ -26,6 +26,7 @@ import {
   type ProfileStore,
   type UserProfile,
 } from "../../lib/profile";
+import { t } from "../../lib/i18n";
 
 type Tab = "profile" | "ai" | "license";
 
@@ -70,9 +71,9 @@ export function OptionsApp() {
         await saveSettings({ ...settings, onboardingDone: true });
         setSettings({ ...settings, onboardingDone: true });
       }
-      setMsg({ type: "ok", text: "บันทึก Profile แล้ว (เก็บในเครื่องคุณเท่านั้น)" });
+      setMsg({ type: "ok", text: t("options.profileSaved") });
     } catch {
-      setMsg({ type: "err", text: "บันทึกไม่สำเร็จ" });
+      setMsg({ type: "err", text: t("options.saveFailed") });
     } finally {
       setBusy(false);
     }
@@ -92,11 +93,11 @@ export function OptionsApp() {
       const s = await addProfile(pro);
       setStore(s);
       setProfile(s.profiles.find((p) => p.id === s.activeId)!);
-      setMsg({ type: "ok", text: "เพิ่มโปรไฟล์แล้ว" });
+      setMsg({ type: "ok", text: t("options.profileAdded") });
     } catch (err) {
       setMsg({
         type: "err",
-        text: err instanceof Error ? err.message : "เพิ่มไม่ได้",
+        text: err instanceof Error ? err.message : t("options.addFailed"),
       });
     } finally {
       setBusy(false);
@@ -110,11 +111,11 @@ export function OptionsApp() {
       const s = await deleteProfile(profile.id);
       setStore(s);
       setProfile(s.profiles.find((p) => p.id === s.activeId)!);
-      setMsg({ type: "ok", text: "ลบโปรไฟล์แล้ว" });
+      setMsg({ type: "ok", text: t("options.profileDeleted") });
     } catch (err) {
       setMsg({
         type: "err",
-        text: err instanceof Error ? err.message : "ลบไม่ได้",
+        text: err instanceof Error ? err.message : t("options.deleteFailed"),
       });
     } finally {
       setBusy(false);
@@ -123,7 +124,10 @@ export function OptionsApp() {
 
   function onExport() {
     if (!pro) {
-      setMsg({ type: "err", text: `Export เป็นฟีเจอร์ Pro (${PRO_PRICE_LABEL})` });
+      setMsg({
+        type: "err",
+        text: t("options.exportPro", { price: PRO_PRICE_LABEL }),
+      });
       return;
     }
     if (!store) return;
@@ -136,12 +140,15 @@ export function OptionsApp() {
     a.download = "ranasi-profiles.json";
     a.click();
     URL.revokeObjectURL(url);
-    setMsg({ type: "ok", text: "Export แล้ว" });
+    setMsg({ type: "ok", text: t("options.exported") });
   }
 
   async function onImportFile(file: File) {
     if (!pro) {
-      setMsg({ type: "err", text: `Import เป็นฟีเจอร์ Pro (${PRO_PRICE_LABEL})` });
+      setMsg({
+        type: "err",
+        text: t("options.importPro", { price: PRO_PRICE_LABEL }),
+      });
       return;
     }
     try {
@@ -156,9 +163,9 @@ export function OptionsApp() {
         imported.profiles.find((p) => p.id === imported.activeId) ??
           imported.profiles[0],
       );
-      setMsg({ type: "ok", text: "Import โปรไฟล์สำเร็จ" });
+      setMsg({ type: "ok", text: t("options.imported") });
     } catch {
-      setMsg({ type: "err", text: "ไฟล์ไม่ถูกต้อง" });
+      setMsg({ type: "err", text: t("options.invalidFile") });
     }
   }
 
@@ -169,9 +176,9 @@ export function OptionsApp() {
     setMsg(null);
     try {
       await saveSettings(settings);
-      setMsg({ type: "ok", text: "บันทึกการตั้งค่า AI แล้ว" });
+      setMsg({ type: "ok", text: t("options.aiSaved") });
     } catch {
-      setMsg({ type: "err", text: "บันทึกไม่สำเร็จ" });
+      setMsg({ type: "err", text: t("options.saveFailed") });
     } finally {
       setBusy(false);
     }
@@ -184,7 +191,7 @@ export function OptionsApp() {
     try {
       const next = await activateLicense(key);
       setLicense(next);
-      setMsg({ type: "ok", text: "Pro activated — Server AI fill พร้อมใช้" });
+      setMsg({ type: "ok", text: t("options.proActivated") });
     } catch (err) {
       setMsg({
         type: "err",
@@ -242,10 +249,7 @@ export function OptionsApp() {
   return (
     <div className="wrap">
       <h1>Ranasi</h1>
-      <p className="lead">
-        ตั้งค่า Profile ครั้งเดียว → กด Auto-Fill ได้ทันที · Free ใช้ในเครื่อง · Pro
-        ได้คีย์จากอีเมลหลังจ่ายเงิน
-      </p>
+      <p className="lead">{t("options.lead")}</p>
 
       <div className="tabs">
         {(
@@ -273,10 +277,10 @@ export function OptionsApp() {
         <form className="card" onSubmit={onSaveProfile}>
           <h2>Profile Setup</h2>
           <p className="meta">
-            ความครบถ้วน {completeness}% ·{" "}
+            {t("options.completeness", { percent: completeness })} ·{" "}
             {pro
-              ? `Pro: ได้ถึง ${PRO_PROFILE_LIMIT} โปรไฟล์`
-              : `Free: ${FREE_PROFILE_LIMIT} โปรไฟล์`}
+              ? t("options.proProfiles", { limit: PRO_PROFILE_LIMIT })
+              : t("options.freeProfiles", { limit: FREE_PROFILE_LIMIT })}
           </p>
 
           <div className="row" style={{ marginBottom: 12 }}>
@@ -320,7 +324,7 @@ export function OptionsApp() {
             {field("Summary / Bio", "summary", { full: true })}
           </div>
 
-          <h2 style={{ marginTop: 22 }}>Payment (local only — ไม่ส่งขึ้นเซิร์ฟเวอร์)</h2>
+          <h2 style={{ marginTop: 22 }}>{t("options.paymentLocal")}</h2>
           <div className="grid">
             {field("Name on card", "cardName")}
             {field("Card number", "cardNumber")}
@@ -369,15 +373,10 @@ export function OptionsApp() {
         <form className="card" onSubmit={onSaveAi}>
           <h2>AI Engine</h2>
           {pro ? (
-            <p className="meta">
-              คุณเป็น Pro — Auto-Fill ใช้ Server AI อัตโนมัติ (ไม่ต้องใส่ key)
-            </p>
+            <p className="meta">{t("options.proAi")}</p>
           ) : (
             <>
-              <p className="meta">
-                Free ใช้ heuristic ในเครื่อง · อยากทดลอง AI เองใส่ OpenAI key ได้
-                หรืออัปเกรด Pro ให้เซิร์ฟเวอร์จัดการให้
-              </p>
+              <p className="meta">{t("options.freeAi")}</p>
               <label className="field full">
                 <span>OpenAI API Key (optional)</span>
                 <input
@@ -398,7 +397,7 @@ export function OptionsApp() {
                     setSettings({ ...settings, useAiFill: e.target.checked })
                   }
                 />
-                ใช้ AI เมื่อมี API key (Free)
+                {t("options.useAi")}
               </label>
               <div className="row" style={{ marginTop: 16 }}>
                 <button className="primary" type="submit" disabled={busy}>
@@ -455,9 +454,10 @@ export function OptionsApp() {
               </>
             ) : (
               <p className="meta">
-                Free: 1 profile · ธีม 2 แบบ · Desktop สูงสุด 10 เว็บ · Pro (
-                {PRO_PRICE_LABEL}): Server AI · {PRO_PROFILE_LIMIT} profiles ·
-                12 ธีม · เว็บไม่จำกัด · export/import
+                {t("options.freeSummary", {
+                  price: PRO_PRICE_LABEL,
+                  limit: PRO_PROFILE_LIMIT,
+                })}
               </p>
             )}
           </div>
@@ -495,8 +495,7 @@ export function OptionsApp() {
               <p className={`msg ${msg.type}`}>{msg.text}</p>
             )}
             <p className="meta" style={{ marginTop: 14 }}>
-              ได้คีย์จากอีเมลหลังจ่ายเงินที่เว็บ Ranasi → วางที่นี่ → Activate ·
-              ไม่ต้องโหลดโฟลเดอร์ใดๆ
+              {t("options.licenseHelp")}
             </p>
           </form>
         </>

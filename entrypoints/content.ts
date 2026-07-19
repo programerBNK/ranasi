@@ -1,5 +1,6 @@
 import type { FormFieldSnapshot } from "../lib/fill-engine";
 import type { FillResponse } from "../lib/messages";
+import { t } from "../lib/i18n";
 
 const ROOT_ID = "autoflow-fill-root";
 const BTN_ID = "autoflow-fill-btn";
@@ -98,7 +99,7 @@ function mountFab() {
   const btn = document.createElement("button");
   btn.id = BTN_ID;
   btn.type = "button";
-  btn.innerHTML = `<span class="af-dot"></span><span>Auto-Fill with AI</span>`;
+  btn.innerHTML = `<span class="af-dot"></span><span>${t("content.button")}</span>`;
   btn.addEventListener("click", () => void onFillClick(btn));
 
   root.appendChild(btn);
@@ -171,7 +172,7 @@ function isVisible(el: HTMLElement): boolean {
 async function onFillClick(btn: HTMLButtonElement) {
   const collected = collectFields();
   if (collected.length === 0) {
-    toast("ไม่พบช่องกรอกบนหน้านี้");
+    toast(t("content.noFields"));
     return;
   }
 
@@ -186,13 +187,13 @@ async function onFillClick(btn: HTMLButtonElement) {
     })) as FillResponse;
 
     if (response.needsProfile) {
-      toast(response.error || "ตั้งค่า Profile ก่อน");
+      toast(response.error || t("content.profileRequired"));
       chrome.runtime.sendMessage({ type: "OPEN_OPTIONS" });
       return;
     }
 
     if (!response.ok) {
-      toast(response.error || "กรอกไม่สำเร็จ");
+      toast(response.error || t("content.failed"));
       return;
     }
 
@@ -204,12 +205,12 @@ async function onFillClick(btn: HTMLButtonElement) {
       n++;
     }
 
-    toast(`กรอกแล้ว ${n} ช่อง (${response.mode})`);
+    toast(t("content.success", { count: n, mode: response.mode }));
   } catch (err) {
-    toast(err instanceof Error ? err.message : "เกิดข้อผิดพลาด");
+    toast(err instanceof Error ? err.message : t("content.error"));
   } finally {
     btn.dataset.busy = "0";
-    if (label) label.textContent = "Auto-Fill with AI";
+    if (label) label.textContent = t("content.button");
   }
 }
 

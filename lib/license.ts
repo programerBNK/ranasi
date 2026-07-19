@@ -1,4 +1,5 @@
 import { API_BASE } from "./config";
+import { t } from "./i18n";
 
 export const LICENSE_STORAGE_KEY = "autoflow_license_v1";
 
@@ -79,14 +80,14 @@ async function readApiJson(res: Response): Promise<ActivateResponse> {
   const text = await res.text();
   if (!text) {
     throw new Error(
-      `API ไม่ตอบกลับ (HTTP ${res.status}). รัน Axum ที่ ${API_BASE}`,
+      t("license.emptyResponse", { status: res.status, api: API_BASE }),
     );
   }
   try {
     return JSON.parse(text) as ActivateResponse;
   } catch {
     throw new Error(
-      `API ตอบไม่ใช่ JSON (HTTP ${res.status}). ตรวจ Axum ที่ ${API_BASE}`,
+      t("license.invalidJson", { status: res.status, api: API_BASE }),
     );
   }
 }
@@ -102,7 +103,7 @@ export async function activateLicense(key: string): Promise<LicenseState> {
     });
   } catch {
     throw new Error(
-      `เชื่อมต่อ ${API_BASE} ไม่ได้ — รัน cd api && cargo run`,
+      t("license.unreachableDev", { api: API_BASE }),
     );
   }
 
@@ -135,7 +136,7 @@ export async function validateLicense(
       body: JSON.stringify({ licenseKey: key, instanceId }),
     });
   } catch {
-    throw new Error(`เชื่อมต่อ ${API_BASE} ไม่ได้`);
+    throw new Error(t("license.unreachable", { api: API_BASE }));
   }
 
   const data = await readApiJson(res);

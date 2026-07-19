@@ -15,11 +15,11 @@ export default function HomePage() {
       <nav className="nav">
         <div className="logo">Ranasi</div>
         <div className="nav-links">
-          <a href="#install">ติดตั้ง</a>
-          <a href="#free">ฟรี</a>
-          <a href="#whats-new">Pro ต่างยังไง</a>
-          <a href="#pro-flow">หลังจ่ายเงิน</a>
-          <a href="#pricing">ราคา</a>
+          <a href="#install">Install</a>
+          <a href="#free">Free</a>
+          <a href="#whats-new">Why Pro?</a>
+          <a href="#pro-flow">After payment</a>
+          <a href="#pricing">Pricing</a>
           <a href="/activate">Activate</a>
         </div>
       </nav>
@@ -27,253 +27,181 @@ export default function HomePage() {
       <section className="hero">
         <h1>Ranasi</h1>
         <p>
-          Desktop ในแท็บใหม่ + กรอกฟอร์มคลิกเดียว เริ่มฟรี อัปเกรด Pro ได้
-          $10/ปี
+          A smarter new-tab desktop and one-click form filling. Start free or
+          upgrade to Pro for $10/year.
         </p>
         <div className="cta-row">
           {published ? (
             <a className="btn btn-primary" href={storeUrl} target="_blank" rel="noreferrer">
-              ติดตั้งจาก Chrome Web Store — ฟรี
+              Install from the Chrome Web Store — Free
             </a>
           ) : (
             <a className="btn btn-primary" href="#install">
-              ดูวิธีติดตั้ง (ฟรี)
+              View installation guide
             </a>
           )}
           <a className="btn btn-ghost" href="/pro">
-            ซื้อ Pro — $10/ปี
+            Get Pro — $10/year
           </a>
         </div>
       </section>
 
       <section className="section" id="install">
-        <h2>โหลด Ranasi จากไหน?</h2>
+        <h2>Where do I get Ranasi?</h2>
         <p>
-          ผู้ใช้ทั่วไป<strong>ไม่ต้องดาวน์โหลดโฟลเดอร์</strong> และไม่ต้องไปเอา
-          ไฟล์จาก GitHub
+          Regular users <strong>do not download a project folder</strong> or
+          get files from GitHub.
         </p>
-
         <div className="callout">
-          <strong>Production (ผู้ใช้จริง)</strong>
+          <strong>For regular users</strong>
           <p>
-            ติดตั้งจาก <strong>Chrome Web Store</strong> เท่านั้น — กด Add to
-            Chrome แล้วใช้ได้ทันที ไม่มีโฟลเดอร์ให้โหลด
+            Install from the <strong>Chrome Web Store</strong>, select Add to
+            Chrome, and start using Ranasi immediately.
           </p>
           {published ? (
             <a className="btn btn-primary" href={storeUrl} target="_blank" rel="noreferrer">
-              เปิด Chrome Web Store
+              Open the Chrome Web Store
             </a>
           ) : (
             <p className="note">
-              ตอนนี้ยังไม่ขึ้น Store — พอเผยแพร่แล้วปุ่มติดตั้งจะชี้ไปที่ลิงก์
-              Store โดยตรง (ตั้งค่า <code>NEXT_PUBLIC_EXTENSION_URL</code>)
+              The store listing is not live yet. Once published, this button
+              will link directly to it.
             </p>
           )}
         </div>
-
         <div className="callout callout-muted">
-          <strong>นักพัฒนาเท่านั้น (ไม่ใช่สำหรับลูกค้า)</strong>
+          <strong>Developers only</strong>
           <p>
-            ตอนเขียนโค้ดใช้ <code>Load unpacked</code> จากโฟลเดอร์ build เช่น{" "}
-            <code>.output/chrome-mv3-dev</code> —{" "}
-            <em>ลูกค้าที่จ่ายเงินไม่ต้องทำแบบนี้</em>
+            During development, use <code>Load unpacked</code> with a build
+            folder such as <code>.output/chrome-mv3-dev</code>. Customers do
+            not need to do this.
           </p>
         </div>
       </section>
 
       <section className="section" id="free">
-        <h2>ใช้แบบฟรี ทำยังไง</h2>
-        <p>ฟรีตลอดชีพ — ไม่ต้องใส่รหัส ไม่ต้องจ่ายเงิน</p>
+        <h2>How to use Ranasi for free</h2>
+        <p>Free forever — no license key or payment required.</p>
         <ol className="guide-list">
           <li>
-            <strong>ติดตั้ง Ranasi</strong>
-            <span>
-              จาก Chrome Web Store → อนุญาตสิทธิ์ที่ขอ → พร้อมใช้
-            </span>
+            <strong>Install Ranasi</strong>
+            <span>Install it from the Chrome Web Store and approve the requested permissions.</span>
           </li>
           <li>
-            <strong>ตั้งค่า Profile ครั้งเดียว</strong>
-            <span>
-              คลิกขวาไอคอน extension → Options (หรือปุ่มตั้งค่าบน New Tab) →
-              กรอกชื่อ อีเมล ที่อยู่ ฯลฯ → บันทึก เก็บในเครื่องคุณเท่านั้น
-            </span>
+            <strong>Set up your profile once</strong>
+            <span>Open Extension Options, enter your details, and save. Your profile stays on your device.</span>
           </li>
           <li>
-            <strong>ใช้ Desktop (แท็บใหม่)</strong>
-            <span>
-              เปิดแท็บใหม่ จะเห็นไอคอนเว็บที่เคยเข้า ปักหมุด ลากจัดเรียง
-              เปลี่ยนชื่อใต้ไอคอนได้
-            </span>
+            <strong>Use the new-tab desktop</strong>
+            <span>Open a new tab to pin, reorder, and launch websites.</span>
           </li>
           <li>
-            <strong>Auto-Fill ฟอร์ม</strong>
-            <span>
-              เปิดหน้าที่มีฟอร์ม → กดปุ่ม <em>Auto-Fill with AI</em> มุมขวาล่าง
-              → ระบบกรอกจาก Profile (โหมดฟรีใช้ heuristic ในเครื่อง)
-            </span>
+            <strong>Auto-fill forms</strong>
+            <span>Open a form and select <em>Auto-Fill with AI</em>. Free mode uses local heuristics.</span>
           </li>
         </ol>
         <div className="feature-grid">
           <div className="feature">
-            <strong>ได้ในฟรี</strong>
+            <strong>Included with Free</strong>
             <ul>
-              <li>Desktop แท็บใหม่</li>
-              <li>1 Profile</li>
-              <li>Auto-Fill ในเครื่อง</li>
-              <li>ธีม Mint / Slate</li>
-              <li>เพิ่มเว็บบน Desktop ได้สูงสุด 10</li>
+              <li>New-tab desktop</li>
+              <li>1 profile</li>
+              <li>Local Auto-Fill</li>
+              <li>Mint and Slate themes</li>
+              <li>Up to 10 desktop websites</li>
             </ul>
           </div>
           <div className="feature">
-            <strong>ยังไม่ได้จนกว่าจะเป็น Pro</strong>
+            <strong>Included with Pro</strong>
             <ul>
-              <li>Server AI กรอกฉลาดขึ้น</li>
-              <li>สูงสุด 5 Profiles</li>
-              <li>12 ธีมพรีเมียม (Noir Gold default)</li>
-              <li>เพิ่มเว็บได้ไม่จำกัด</li>
-              <li>Export / Import</li>
+              <li>Smarter Server AI filling</li>
+              <li>Up to 5 profiles</li>
+              <li>12 premium themes</li>
+              <li>Unlimited websites</li>
+              <li>Export and import</li>
             </ul>
           </div>
         </div>
       </section>
 
       <section className="section" id="whats-new">
-        <h2>Pro ต่างจากฟรียังไง (ล่าสุด)</h2>
-        <p>อัปเกรดแล้ว Desktop ดูแพงขึ้นชัดเจน — และใช้งานได้กว้างกว่า</p>
+        <h2>What makes Pro different?</h2>
+        <p>Pro expands your desktop and adds smarter, server-powered form filling.</p>
         <ol className="guide-list numbered">
           <li>
-            <strong>ธีม Pro default: Noir Gold</strong>
-            <span>
-              พื้นหลังลึก มีเงาหลายชั้น สะท้อนแสงบนไอคอน — ดูทันสมัยและ professional
-              กว่าธีมฟรีมาก
-            </span>
+            <strong>Noir Gold by default</strong>
+            <span>A premium theme with layered depth, shadows, and icon highlights.</span>
           </li>
           <li>
-            <strong>เลือกได้ 12 ธีม Pro</strong>
-            <span>
-              Noir Gold, Ember, Arctic, Ocean, Forest, Rose, Graphite, Sand,
-              Aurora, Copper, Ivory, Azure — สลับได้จากปุ่ม Theme บนแท็บใหม่
-            </span>
+            <strong>12 Pro themes</strong>
+            <span>Noir Gold, Ember, Arctic, Ocean, Forest, Rose, Graphite, Sand, Aurora, Copper, Ivory, and Azure.</span>
           </li>
           <li>
-            <strong>เว็บบน Desktop ไม่จำกัด</strong>
-            <span>
-              ฟรีเพิ่มได้สูงสุด 10 เว็บ · Pro เพิ่มได้ไม่จำกัด (ปักหมุด / ลากจัดเรียงได้ตามใจ)
-            </span>
+            <strong>Unlimited desktop websites</strong>
+            <span>Pin and arrange as many websites as you need.</span>
           </li>
           <li>
-            <strong>Server AI + 5 Profiles + Export</strong>
-            <span>เหมือนเดิม — กรอกฟอร์มฉลาดขึ้น และจัดการโปรไฟล์ได้หลายชุด</span>
+            <strong>Server AI, 5 profiles, and export</strong>
+            <span>Fill more intelligently and manage multiple sets of profile details.</span>
           </li>
         </ol>
       </section>
 
       <section className="section" id="pro-flow">
-        <h2>จ่ายเงินแล้ว ได้รหัสจากอีเมล — ทำต่อยังไง</h2>
-        <p>ทำตามลำดับนี้จนใช้งาน Pro ได้</p>
+        <h2>What to do after payment</h2>
+        <p>Follow these steps to activate Pro.</p>
         <ol className="guide-list numbered">
-          <li>
-            <strong>จ่าย $10/ปี</strong>
-            <span>
-              ไปหน้า <a href="/pro">Get Pro</a> → จ่ายผ่าน Lemon Squeezy (บัตร
-              / ช่องทางที่รองรับ) → ได้ใบเสร็จทางอีเมล
-            </span>
-          </li>
-          <li>
-            <strong>รับ License Key</strong>
-            <span>
-              เปิดอีเมลจาก <strong>Lemon Squeezy</strong> → คัดลอก{" "}
-              <strong>License Key</strong> (รหัสยาวๆ) · หน้า Success บนเว็บก็อาจ
-              โชว์คีย์ด้วย
-            </span>
-          </li>
-          <li>
-            <strong>ติดตั้ง Extension ก่อน (ถ้ายังไม่มี)</strong>
-            <span>
-              ต้องมี Ranasi จาก Chrome Web Store อยู่แล้ว —{" "}
-              <em>ไม่ต้องโหลดโฟลเดอร์</em>
-            </span>
-          </li>
-          <li>
-            <strong>วางคีย์ใน Extension</strong>
-            <span>
-              Chrome → ไอคอน puzzle มุมขวา → Ranasi → <strong>Options</strong>{" "}
-              → แท็บ <strong>License</strong> → วางคีย์ → กด{" "}
-              <strong>Activate</strong>
-            </span>
-          </li>
-          <li>
-            <strong>เริ่มใช้ Pro</strong>
-            <span>
-              สถานะเป็น Pro → แท็บใหม่เปิดธีม <strong>Noir Gold</strong> อัตโนมัติ
-              → เลือกได้อีก 11 ธีม · เพิ่มเว็บได้ไม่จำกัด · Auto-Fill ใช้ Server AI ·
-              Profile ได้ถึง 5
-            </span>
-          </li>
+          <li><strong>Pay $10/year</strong><span>Visit <a href="/pro">Get Pro</a> and complete checkout with Lemon Squeezy.</span></li>
+          <li><strong>Get your license key</strong><span>Copy the license key from your Lemon Squeezy email.</span></li>
+          <li><strong>Install the extension</strong><span>Install Ranasi from the Chrome Web Store if you have not already.</span></li>
+          <li><strong>Paste the key</strong><span>Open Ranasi Options → License, paste the key, and select Activate.</span></li>
+          <li><strong>Start using Pro</strong><span>Your new tab switches to Noir Gold and unlocks Server AI, 5 profiles, and unlimited websites.</span></li>
         </ol>
         <div className="cta-row">
-          <a className="btn btn-primary" href={payHref}>
-            {ready ? "ไปจ่ายเงิน Pro" : "ดูหน้า Get Pro"}
-          </a>
-          <a className="btn btn-ghost" href="/activate">
-            ตรวจคีย์ / ดูวิธี Activate
-          </a>
+          <a className="btn btn-primary" href={payHref}>{ready ? "Pay for Pro" : "View Get Pro"}</a>
+          <a className="btn btn-ghost" href="/activate">Validate a key</a>
         </div>
         <div className="callout" style={{ marginTop: 24 }}>
-          <strong>ถ้าหาอีเมลไม่เจอ</strong>
-          <p>
-            เช็ก Spam / โฟลเดอร์โปรโมชัน · ค้นหาคำว่า Lemon Squeezy หรือ Ranasi ·
-            หรือเปิดหน้า <a href="/activate">/activate</a> วางคีย์เพื่อตรวจว่าใช้ได้
-            ก่อนใส่ใน Extension
-          </p>
+          <strong>Cannot find the email?</strong>
+          <p>Check spam and promotions, then search for Lemon Squeezy or Ranasi.</p>
         </div>
       </section>
 
       <section className="section" id="pricing">
-        <h2>ราคา</h2>
-        <p>โปรไฟล์เก็บในเครื่องคุณ · Pro AI รันบนเซิร์ฟเวอร์ Ranasi</p>
+        <h2>Pricing</h2>
+        <p>Your profile stays on your device. Pro AI runs on Ranasi servers.</p>
         <div className="pricing">
           <div className="price-card">
             <h3>Free</h3>
-            <div className="price">
-              $0 <small>ตลอดชีพ</small>
-            </div>
+            <div className="price">$0 <small>forever</small></div>
             <ul>
-              <li>ติดตั้งจาก Chrome Web Store</li>
-              <li>Desktop + 1 Profile</li>
-              <li>Auto-Fill ในเครื่อง</li>
-              <li>ธีม Mint / Slate</li>
-              <li>เพิ่มเว็บได้สูงสุด 10</li>
+              <li>Chrome Web Store installation</li>
+              <li>Desktop and 1 profile</li>
+              <li>Local Auto-Fill</li>
+              <li>Mint and Slate themes</li>
+              <li>Up to 10 websites</li>
             </ul>
-            <a className="btn btn-ghost" href="#free">
-              วิธีใช้ฟรี
-            </a>
+            <a className="btn btn-ghost" href="#free">How Free works</a>
           </div>
           <div className="price-card featured">
             <h3>Pro</h3>
-            <div className="price">
-              $10 <small>/ ปี</small>
-            </div>
+            <div className="price">$10 <small>/ year</small></div>
             <ul>
-              <li>ได้ License Key ทางอีเมล</li>
+              <li>License key delivered by email</li>
               <li>Server AI Auto-Fill</li>
-              <li>สูงสุด 5 Profiles</li>
-              <li>12 ธีมพรีเมียม (Noir Gold default)</li>
-              <li>เพิ่มเว็บได้ไม่จำกัด</li>
-              <li>Export / Import</li>
+              <li>Up to 5 profiles</li>
+              <li>12 premium themes</li>
+              <li>Unlimited websites</li>
+              <li>Export and import</li>
             </ul>
-            <a className="btn btn-primary" href={payHref}>
-              {ready ? "จ่าย $10/ปี" : "Get Pro"}
-            </a>
+            <a className="btn btn-primary" href={payHref}>{ready ? "Pay $10/year" : "Get Pro"}</a>
           </div>
         </div>
       </section>
 
       <footer className="site-footer">
         <strong>Ranasi</strong>
-        <span>
-          ผู้ใช้จริง = Chrome Web Store · ไม่ใช้โฟลเดอร์ · คีย์ Pro มาจากอีเมลหลังจ่าย
-        </span>
+        <span>Install from the Chrome Web Store. Pro keys arrive by email after payment.</span>
       </footer>
     </main>
   );
