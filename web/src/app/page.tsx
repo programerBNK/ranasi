@@ -4,6 +4,10 @@ import {
   SiteNav,
   installHref,
 } from "@/components/SiteChrome";
+import {
+  DesktopPreview,
+  OptionsPreview,
+} from "@/components/ProductShowcase";
 
 export default function HomePage() {
   const ready = isCheckoutConfigured();
@@ -11,39 +15,83 @@ export default function HomePage() {
   const store = installHref();
 
   return (
-    <main className="shell">
+    <main className="shell shell-home">
       <SiteNav />
 
-      <header className="hero-stage">
-        <div className="hero-copy">
-          <h1 className="hero-brand">Ranasi</h1>
-          <p className="hero-line">Fill once. Browse faster.</p>
-          <p className="hero-support">
-            A polished new-tab desktop and one-click autofill from your local
-            profile. Free to start. Pro from $10/year.
-          </p>
-          <div className="cta-row">
-            <a
-              className="btn btn-primary"
-              href={store}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Install free
-            </a>
-            <a className="btn btn-ghost" href={payHref}>
-              Get Pro
-            </a>
+      <header className="hero-bleed">
+        <div className="hero-bleed-inner">
+          <div className="hero-copy">
+            <h1 className="hero-brand">Ranasi</h1>
+            <p className="hero-line">Your browser, elevated.</p>
+            <p className="hero-support">
+              A dimensional new-tab desktop and one-click autofill — the same
+              experience you see in the product, now on the web.
+            </p>
+            <div className="cta-row">
+              <a
+                className="btn btn-primary"
+                href={store}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Install free
+              </a>
+              <a className="btn btn-ghost" href={payHref}>
+                Get Pro — $10/year
+              </a>
+            </div>
           </div>
+          <DesktopPreview />
         </div>
       </header>
+
+      <section className="section" id="product">
+        <p className="section-label">The product</p>
+        <h2>Exactly what you use every day</h2>
+        <p className="section-lead">
+          Pro Desktop themes, profile setup, and Auto-Fill — designed as one
+          coherent system.
+        </p>
+        <div className="showcase-row">
+          <div className="showcase-copy">
+            <h3>Pro Desktop</h3>
+            <p>
+              Open a new tab into a rich, themed workspace. Pin unlimited sites
+              on Pro, switch among 12 premium looks, and launch everything from
+              one calm surface.
+            </p>
+            <ul className="bullet-clean">
+              <li>Noir Gold, Ember, Ocean, Aurora, and more</li>
+              <li>Dimensional tiles with depth and light</li>
+              <li>Export and import your layout</li>
+            </ul>
+          </div>
+          <DesktopPreview />
+        </div>
+        <div className="showcase-row reverse">
+          <div className="showcase-copy">
+            <h3>Profile &amp; Auto-Fill</h3>
+            <p>
+              Save your details once in Options. On any form, start Auto-Fill
+              and Ranasi writes the fields for you — locally on Free, with
+              Server AI on Pro.
+            </p>
+            <ul className="bullet-clean">
+              <li>Up to 5 profiles on Pro</li>
+              <li>License activation by email key</li>
+              <li>Private defaults on your device</li>
+            </ul>
+          </div>
+          <OptionsPreview />
+        </div>
+      </section>
 
       <section className="section" id="install">
         <p className="section-label">Get started</p>
         <h2>Install from the Chrome Web Store</h2>
         <p className="section-lead">
-          Add Ranasi to Chrome in one click, then set your profile and start
-          filling forms.
+          Add Ranasi to Chrome, set your profile, and start filling forms in
+          minutes.
         </p>
         <ol className="guide-list numbered">
           <li>
@@ -53,24 +101,21 @@ export default function HomePage() {
               <a href={store} target="_blank" rel="noreferrer">
                 Chrome Web Store
               </a>{" "}
-              listing and select Add to Chrome.
+              and select Add to Chrome.
             </span>
           </li>
           <li>
             <strong>Create your profile</strong>
-            <span>
-              Open Ranasi Options and save your details on your device.
-            </span>
+            <span>Open Options → Profile and save your details on-device.</span>
           </li>
           <li>
-            <strong>Use your new tab</strong>
-            <span>Pin sites, pick a theme, and launch your day from one place.</span>
+            <strong>Open a new tab</strong>
+            <span>Meet your Pro Desktop — pin sites and pick a theme.</span>
           </li>
           <li>
-            <strong>Auto-Fill forms</strong>
+            <strong>Auto-Fill</strong>
             <span>
-              On any form page, select Auto-Fill with AI to fill from your
-              profile.
+              On a form page, select Auto-Fill with AI and watch fields fill.
             </span>
           </li>
         </ol>
@@ -87,98 +132,10 @@ export default function HomePage() {
       </section>
 
       <section className="section" id="features">
-        <p className="section-label">Product</p>
-        <h2>Built for everyday browsing</h2>
+        <p className="section-label">Plans</p>
+        <h2>Free to start. Pro when you are ready.</h2>
         <p className="section-lead">
-          Keep your information private on your device. Upgrade when you need
-          more power.
-        </p>
-        <div className="split">
-          <div className="rail">
-            <div className="rail-item">
-              <strong>New-tab desktop</strong>
-              <span>Pin, rename, and rearrange the sites you use most.</span>
-            </div>
-            <div className="rail-item">
-              <strong>One-click autofill</strong>
-              <span>Fill forms from a single local profile without retyping.</span>
-            </div>
-            <div className="rail-item">
-              <strong>Private by default</strong>
-              <span>Free fill runs on your device. You control what you save.</span>
-            </div>
-          </div>
-          <div className="rail">
-            <div className="rail-item">
-              <strong>Free</strong>
-              <span>
-                1 profile, Mint &amp; Slate themes, local Auto-Fill, up to 10
-                desktop sites.
-              </span>
-            </div>
-            <div className="rail-item">
-              <strong>Pro</strong>
-              <span>
-                Server AI fill, 5 profiles, 12 themes, unlimited sites, export
-                &amp; import.
-              </span>
-            </div>
-            <div className="rail-item">
-              <strong>Simple licensing</strong>
-              <span>
-                Pay once a year, receive a key by email, activate in Options.
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section" id="pro-flow">
-        <p className="section-label">Pro</p>
-        <h2>After you purchase</h2>
-        <p className="section-lead">
-          Activate Pro in the extension with the license key from your email.
-        </p>
-        <ol className="guide-list numbered">
-          <li>
-            <strong>Complete checkout</strong>
-            <span>
-              Purchase on the <a href="/pro">Get Pro</a> page.
-            </span>
-          </li>
-          <li>
-            <strong>Copy your license key</strong>
-            <span>Find it in your confirmation email. Check spam if needed.</span>
-          </li>
-          <li>
-            <strong>Activate in Ranasi</strong>
-            <span>
-              Options → License → paste the key → Activate. You can also{" "}
-              <a href="/activate">validate the key here</a> first.
-            </span>
-          </li>
-          <li>
-            <strong>Enjoy Pro</strong>
-            <span>
-              Unlock Noir Gold, Server AI, five profiles, and unlimited sites.
-            </span>
-          </li>
-        </ol>
-        <div className="cta-row">
-          <a className="btn btn-primary" href={payHref}>
-            Get Pro — $10/year
-          </a>
-          <a className="btn btn-ghost" href="/activate">
-            Validate a key
-          </a>
-        </div>
-      </section>
-
-      <section className="section" id="pricing">
-        <p className="section-label">Pricing</p>
-        <h2>Simple plans</h2>
-        <p className="section-lead">
-          Start free. Upgrade when you need Server AI and unlimited sites.
+          The same craft in every plan — more power when you upgrade.
         </p>
         <div className="pricing">
           <div className="price-card">
@@ -187,7 +144,6 @@ export default function HomePage() {
               $0 <small>forever</small>
             </div>
             <ul>
-              <li>Chrome Web Store install</li>
               <li>New-tab desktop</li>
               <li>1 profile · local Auto-Fill</li>
               <li>Mint &amp; Slate themes</li>
@@ -208,7 +164,6 @@ export default function HomePage() {
               $10 <small>/ year</small>
             </div>
             <ul>
-              <li>License key by email</li>
               <li>Server AI Auto-Fill</li>
               <li>Up to 5 profiles</li>
               <li>12 premium themes</li>
@@ -219,6 +174,34 @@ export default function HomePage() {
             </a>
           </div>
         </div>
+      </section>
+
+      <section className="section" id="pro-flow">
+        <p className="section-label">After purchase</p>
+        <h2>Unlock Pro in four steps</h2>
+        <ol className="guide-list numbered">
+          <li>
+            <strong>Checkout</strong>
+            <span>
+              Pay on <a href="/pro">Get Pro</a>.
+            </span>
+          </li>
+          <li>
+            <strong>Email key</strong>
+            <span>Copy the license key from your confirmation email.</span>
+          </li>
+          <li>
+            <strong>Activate</strong>
+            <span>
+              Options → License → Activate. Or{" "}
+              <a href="/activate">validate here</a> first.
+            </span>
+          </li>
+          <li>
+            <strong>Enjoy</strong>
+            <span>Noir Gold, Server AI, five profiles, unlimited sites.</span>
+          </li>
+        </ol>
       </section>
 
       <SiteFooter />

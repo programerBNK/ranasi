@@ -15,8 +15,8 @@ type NavProps = {
 };
 
 const defaultLinks = [
+  { href: "/#product", label: "Product" },
   { href: "/#install", label: "Install" },
-  { href: "/#features", label: "Features" },
   { href: "/pro", label: "Pro" },
   { href: "/activate", label: "Activate" },
 ];
