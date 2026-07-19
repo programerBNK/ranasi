@@ -22,11 +22,12 @@ export default function HomePage() {
       <header className="hero-bleed">
         <div className="hero-bleed-inner">
           <div className="hero-copy">
+            <p className="hero-eyebrow">Chrome extension</p>
             <h1 className="hero-brand">Ranasi</h1>
             <p className="hero-line">Your browser, elevated.</p>
             <p className="hero-support">
-              A dimensional new-tab desktop and one-click autofill — the same
-              experience you see in the product, now on the web.
+              A dimensional new-tab desktop and one-click autofill — built for
+              everyday work, not demos.
             </p>
             <div className="cta-row">
               <a
@@ -42,7 +43,9 @@ export default function HomePage() {
               </a>
             </div>
           </div>
-          <DesktopPreview />
+          <div className="hero-visual">
+            <DesktopPreview />
+          </div>
         </div>
       </header>
 
