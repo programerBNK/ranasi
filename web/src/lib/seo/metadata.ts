@@ -80,5 +80,10 @@ export function buildMetadata({
           },
         },
     category: "technology",
+    verification: {
+      google:
+        process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
+        "4514-v_8gnLL_waTB9PzlYG7B_uV29ts1CdKnfAJMTU",
+    },
   };
 }
