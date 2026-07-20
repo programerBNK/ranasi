@@ -106,20 +106,22 @@ English
 | Uses remote code | No |
 | Data | License key/instance for Pro; optional form context when using server AI fill |
 | Remote host | `https://api.ranasi.com` |
-| Privacy policy | `https://www.ranasi.com` |
+| Privacy policy | `https://www.ranasi.com/privacy` |
 
 ---
 
 ## ขั้นตอนใน Dashboard
 
-1. Package — อัปโหลด zip จาก `npm run zip` (ถ้ายังไม่ขึ้น)
-2. Store listing — อัปโหลดรูปตามตาราง + วางข้อความด้านบน
+1. Package — อัปโหลด zip จาก `npm run zip` (ชื่อ extension ตาม `messages.json`)
+2. Store listing — อัปเดต **Title + Summary + Description** ตามข้อความด้านบน (สำคัญมากสำหรับ SEO)
 3. Privacy — ตอบตามตาราง
-4. Distribution — เลือกภูมิภาค / Visible in store
+4. Distribution — Visible in store
 5. Submit for review
 
-หลังอนุมัติ เอา URL Store ใส่ Vercel:
+URL Store (ใส่ Vercel ด้วย):
 
 ```
-NEXT_PUBLIC_EXTENSION_URL=https://chromewebstore.google.com/detail/ranasi/XXXX
+NEXT_PUBLIC_EXTENSION_URL=https://chromewebstore.google.com/detail/ranasi/jhnkiofckjnbekegndfoaafeialceplb
 ```
+
+**ทำไมต้องแก้ชื่อ Store:** ค้น Google ว่า `autofill extension` มักได้ผลจาก Chrome Web Store ก่อน — ถ้าชื่อมีแค่ “Ranasi” จะไม่เข้าคู่คำค้น
