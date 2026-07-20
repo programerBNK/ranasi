@@ -157,6 +157,14 @@ export const SEO_KEYWORDS: string[] = [
   'chrome homepage pins',
   'new tab speed dial',
   'visual bookmarks new tab',
+  'desktop-style new tab',
+  'chrome start page extension',
+  'browser start page chrome',
+  'new tab desktop ui',
+  'organize websites new tab',
+  'แท็บใหม่แบบเดสก์ท็อป',
+  'จัดหน้าแท็บใหม่ chrome',
+  'ปักหมุดเว็บไซต์แท็บใหม่',
 
   // Profiles
   'autofill profiles',
@@ -255,14 +263,6 @@ export const SEO_KEYWORDS: string[] = [
   'fill same form many times',
   'speed run web forms',
   'reduce form fatigue',
-  'accessibility form fill helper',
-  'mobile chrome form autofill',
-  'desktop chrome form productivity',
-  'remote work form automation',
-  'freelancer form filler tool',
-  'student application autofill',
-  'recruiter form fill speed',
-  'hr onboarding form fill',
 
   // Thai queries
   'ส่วนขยาย chrome เติมฟอร์ม',

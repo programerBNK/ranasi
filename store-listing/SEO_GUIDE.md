@@ -1,54 +1,49 @@
-# SEO for Ranasi — what was built + how ranking works
+# SEO for Ranasi — ranking for real keywords
 
-## Honest expectation
+## What Google shows today (tested)
 
-**Nobody can guarantee Google #1** for 300 keywords by adding a list alone. Ranking depends on:
+| Query | Result |
+|-------|--------|
+| `Ranasi` | Site found (brand search works) |
+| `autofill` / `auto fill` alone | Dominated by Chrome + big Store extensions — Ranasi will not appear soon |
+| Exact long-tail matching `/autofill` title | `www.ranasi.com/autofill` can appear |
+| `chrome new tab dashboard` | Competitive Store listings; need `/new-tab` + Store SEO |
 
-1. Technical SEO (done below)
-2. Relevant content pages (done: `/autofill` + site copy)
-3. Chrome Web Store listing going **Published** (backlinks + brand searches)
-4. Google Search Console verification + time (weeks–months)
-5. Backlinks / mentions from real sites
-6. Competition on head terms like bare `autofill` is extremely high — long-tails rank first
+**Rule:** Rank for *intent phrases* first (`chrome autofill extension`, `custom new tab chrome`, `auto fill chrome extension`). Head terms like bare `autofill` take months + Store traction + links.
 
-The 300 phrases are your **keyword map** for content, ads, and Store listing — not a spam block to dump on one page (that can hurt rankings).
+## English for “จัดหน้าเว็บเหมือน desktop”
 
----
+Use these on Store + pages (Ranasi already targets them on `/new-tab`):
 
-## Files
+- **custom new tab** / **new tab page (NTP)**
+- **desktop-style new tab** / **new tab desktop**
+- **new tab dashboard** / **browser start page**
+- **pin websites** / **speed dial**
 
-| File | Purpose |
-|------|---------|
-| `web/src/lib/seo/keywords.ts` | 300 phrases in TypeScript |
-| `web/src/lib/seo/keywords.json` | Same list for export / sheets |
-| `web/src/lib/seo/metadata.ts` | Shared title/description/OG helpers |
-| `web/src/app/sitemap.ts` | `https://www.ranasi.com/sitemap.xml` |
-| `web/src/app/robots.ts` | `https://www.ranasi.com/robots.txt` |
-| `web/src/app/autofill/page.tsx` | Pillar SEO page + FAQ schema |
-| `web/src/app/opengraph-image.tsx` | Social share image |
+## Do NOT target OCR
 
----
+Ranasi does **not** do OCR (image text scanning). Claiming OCR hurts trust and rankings. FAQ on `/chrome-extension` states this clearly.
 
-## Live URLs to check after deploy
+## Pillar pages (index these in GSC)
 
-- https://www.ranasi.com/sitemap.xml
-- https://www.ranasi.com/robots.txt
-- https://www.ranasi.com/autofill
-- View source → JSON-LD (`Organization`, `WebSite`, `SoftwareApplication`, FAQ on `/autofill`)
+| Path | Intent |
+|------|--------|
+| `/autofill` | autofill, auto fill, AI form filler |
+| `/new-tab` | new tab desktop, custom start page, pin sites |
+| `/chrome-extension` | chrome extension + install funnel |
+| `/` | brand + product overview |
 
----
+Sitemap: `https://www.ranasi.com/sitemap.xml`
 
-## Your next steps (required for real ranking)
+## After every deploy
 
-1. **Google Search Console** → Add property `https://www.ranasi.com` → verify DNS (Cloudflare TXT) or HTML tag  
-2. Submit sitemap: `https://www.ranasi.com/sitemap.xml`  
-3. **Bing Webmaster** (optional) same sitemap  
-4. When Chrome Web Store is **Published**, set `NEXT_PUBLIC_EXTENSION_URL` and link Store ↔ website  
-5. Use the 300 keywords for: Store description, future blog posts, YouTube titles — one topic per page, natural writing  
-6. Prefer long-tails first, e.g. `chrome autofill extension one click`, `AI form filler chrome`, `job application autofill extension`
+1. Google Search Console → **URL Inspection** → request indexing for `/`, `/autofill`, `/new-tab`, `/chrome-extension`
+2. Confirm sitemap still **Success**
+3. Set Vercel `NEXT_PUBLIC_EXTENSION_URL` to the live Store URL (site also falls back to the published listing ID)
+4. Optimize **Chrome Web Store** title/description with the same phrases (Store search ≠ Google web search, but both matter)
 
----
+## Honest timeline
 
-## Thai + English
-
-The keyword file includes Thai queries for users in Thailand. Site UI default is English; `<html lang>` follows browser locale. Consider a Thai landing later if Thailand is a primary market.
+- Brand (`Ranasi`): days–weeks once indexed
+- Mid-tail (`chrome autofill extension one click`): weeks–months
+- Head (`autofill`): unlikely without major authority; aim for Store category + long-tails instead

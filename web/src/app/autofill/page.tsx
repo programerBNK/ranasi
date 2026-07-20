@@ -196,6 +196,8 @@ export default function AutofillSeoPage() {
 
         <p className="seo-p" style={{ marginTop: 36 }}>
           Related: <Link href="/">Ranasi home</Link> ·{" "}
+          <Link href="/new-tab">New tab desktop</Link> ·{" "}
+          <Link href="/chrome-extension">Chrome extension</Link> ·{" "}
           <Link href="/pro">Get Pro</Link> ·{" "}
           <Link href="/privacy">Privacy</Link> ·{" "}
           <Link href="/activate">Activate license</Link>

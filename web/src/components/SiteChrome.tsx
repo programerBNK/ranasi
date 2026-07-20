@@ -1,13 +1,8 @@
 import Link from "next/link";
-import {
-  extensionStoreUrl,
-  isExtensionPublished,
-} from "@/lib/extension";
+import { extensionStoreUrl } from "@/lib/extension";
 
 export function installHref(): string {
-  return isExtensionPublished()
-    ? extensionStoreUrl()
-    : "https://chromewebstore.google.com/";
+  return extensionStoreUrl();
 }
 
 type NavProps = {
@@ -18,6 +13,7 @@ const defaultLinks = [
   { href: "/#product", label: "Product" },
   { href: "/#demo", label: "Demo" },
   { href: "/autofill", label: "Autofill" },
+  { href: "/new-tab", label: "New Tab" },
   { href: "/pro", label: "Pro" },
   { href: "/activate", label: "Activate" },
 ];
@@ -56,6 +52,9 @@ export function SiteFooter() {
         <span>Smart autofill for the browser you already use.</span>
       </div>
       <div className="site-footer-links">
+        <Link href="/autofill">Autofill</Link>
+        <Link href="/new-tab">New Tab</Link>
+        <Link href="/chrome-extension">Extension</Link>
         <Link href="/pro">Get Pro</Link>
         <Link href="/activate">Activate</Link>
         <Link href="/privacy">Privacy</Link>

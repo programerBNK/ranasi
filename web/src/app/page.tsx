@@ -26,8 +26,8 @@ export default function HomePage() {
             <h1 className="hero-brand">Ranasi</h1>
             <p className="hero-line">Your browser, elevated.</p>
             <p className="hero-support">
-              A dimensional new-tab desktop and one-click autofill — built for
-              everyday work, not demos.
+              Chrome autofill for web forms in one click, plus a desktop-style
+              new tab to pin websites — a custom start page for everyday work.
             </p>
             <div className="cta-row">
               <a
@@ -99,6 +99,29 @@ export default function HomePage() {
           <a href="/autofill">Chrome autofill guide</a>.
         </p>
         <AutoFillDemo />
+      </section>
+
+      <section className="section" id="guides">
+        <p className="section-label">Guides</p>
+        <h2>Find Ranasi by what you need</h2>
+        <p className="section-lead">
+          Autofill, auto fill, Chrome extension, or a new tab that feels like a
+          desktop — pick a guide.
+        </p>
+        <ul className="bullet-clean">
+          <li>
+            <a href="/autofill">Chrome autofill &amp; auto fill forms</a> — one-click
+            form filler with profiles
+          </li>
+          <li>
+            <a href="/new-tab">New tab desktop &amp; start page</a> — pin websites,
+            themes, custom Chrome new tab
+          </li>
+          <li>
+            <a href="/chrome-extension">Ranasi Chrome extension</a> — install,
+            setup, Free vs Pro
+          </li>
+        </ul>
       </section>
 
       <section className="section" id="install">
