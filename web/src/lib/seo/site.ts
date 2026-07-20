@@ -5,22 +5,22 @@ export const SITE_URL =
 export const SITE_NAME = "Ranasi";
 
 export const DEFAULT_TITLE =
-  "Ranasi — Autofill Chrome Extension, Auto Fill Forms & New Tab Desktop";
+  "Autofill Extension for Chrome — Auto Fill Forms | Ranasi";
 
 export const DEFAULT_DESCRIPTION =
-  "Chrome extension for autofill / auto fill web forms in one click, plus a desktop-style new tab to pin websites. Free AI form filler start. Pro $10/year.";
+  "Free autofill extension & auto fill Chrome extension. Fill web forms in one click, plus a desktop-style new tab. AI form filler on Pro — $10/year.";
 
 export const PRIMARY_KEYWORDS = [
-  "chrome autofill extension",
+  "autofill extension",
+  "auto fill extension",
   "autofill",
   "auto fill",
+  "chrome extension",
+  "chrome autofill extension",
   "auto fill chrome extension",
-  "AI form filler",
+  "autofill chrome extension",
   "chrome extension autofill",
-  "chrome new tab desktop",
-  "custom new tab chrome",
-  "new tab dashboard",
-  "pin websites new tab",
+  "AI form filler",
   "form autofill extension",
-  "one click autofill",
+  "chrome new tab desktop",
 ] as const;

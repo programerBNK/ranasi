@@ -21,7 +21,9 @@ export function organizationJsonLd() {
     name: SITE_NAME,
     url: SITE_URL,
     logo: `${SITE_URL}/icon.png`,
-    sameAs: [],
+    sameAs: [
+      "https://chromewebstore.google.com/detail/ranasi/jhnkiofckjnbekegndfoaafeialceplb",
+    ],
     contactPoint: {
       "@type": "ContactPoint",
       email: "bnatharuch@gmail.com",
@@ -47,7 +49,13 @@ export function softwareAppJsonLd() {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: SITE_NAME,
+    alternateName: [
+      "Ranasi Autofill Chrome Extension",
+      "Ranasi autofill extension",
+      "Ranasi auto fill",
+    ],
     applicationCategory: "BrowserApplication",
+    applicationSubCategory: "Autofill Chrome Extension",
     operatingSystem: "Chrome",
     offers: [
       {
@@ -65,13 +73,20 @@ export function softwareAppJsonLd() {
     ],
     description: DEFAULT_DESCRIPTION,
     url: SITE_URL,
+    downloadUrl:
+      "https://chromewebstore.google.com/detail/ranasi/jhnkiofckjnbekegndfoaafeialceplb",
+    installUrl:
+      "https://chromewebstore.google.com/detail/ranasi/jhnkiofckjnbekegndfoaafeialceplb",
     featureList: [
-      "One-click Chrome autofill",
-      "AI form filling",
-      "Local profiles",
-      "New tab desktop",
-      "Premium themes",
+      "Autofill extension for Chrome",
+      "Auto fill web forms in one click",
+      "AI form filling on Pro",
+      "Local autofill profiles",
+      "New tab desktop / start page",
+      "Pin websites on new tab",
     ],
+    keywords:
+      "autofill, auto fill, autofill extension, chrome extension, chrome autofill extension, auto fill chrome extension",
   };
 }
 

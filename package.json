@@ -2,7 +2,7 @@
   "name": "ranasi",
   "displayName": "Ranasi",
   "version": "0.1.0",
-  "description": "Smart AI Browser Assistant — desktop new tab with one-click autofill",
+  "description": "Autofill / auto fill web forms in one click — Chrome autofill extension with desktop new tab",
   "type": "module",
   "scripts": {
     "dev": "wxt",

@@ -22,12 +22,12 @@ export default function HomePage() {
       <header className="hero-bleed">
         <div className="hero-bleed-inner">
           <div className="hero-copy">
-            <p className="hero-eyebrow">Chrome extension</p>
+            <p className="hero-eyebrow">Autofill Chrome extension</p>
             <h1 className="hero-brand">Ranasi</h1>
-            <p className="hero-line">Your browser, elevated.</p>
+            <p className="hero-line">Autofill. Auto fill. One click.</p>
             <p className="hero-support">
-              Chrome autofill for web forms in one click, plus a desktop-style
-              new tab to pin websites — a custom start page for everyday work.
+              Free autofill extension for Chrome — auto fill web forms from your
+              profile, plus a desktop-style new tab to pin websites.
             </p>
             <div className="cta-row">
               <a
@@ -110,16 +110,19 @@ export default function HomePage() {
         </p>
         <ul className="bullet-clean">
           <li>
-            <a href="/autofill">Chrome autofill &amp; auto fill forms</a> — one-click
-            form filler with profiles
+            <a href="/autofill-extension">Autofill extension for Chrome</a> —
+            autofill / auto fill forms in one click
+          </li>
+          <li>
+            <a href="/autofill">Chrome autofill guide</a> — profiles, AI fill, FAQ
           </li>
           <li>
             <a href="/new-tab">New tab desktop &amp; start page</a> — pin websites,
             themes, custom Chrome new tab
           </li>
           <li>
-            <a href="/chrome-extension">Ranasi Chrome extension</a> — install,
-            setup, Free vs Pro
+            <a href="/chrome-extension">Chrome extension overview</a> — install
+            Free vs Pro
           </li>
         </ul>
       </section>

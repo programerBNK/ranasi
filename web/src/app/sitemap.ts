@@ -6,6 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[0]["changeFrequency"] }[] = [
     { path: "/", priority: 1, changeFrequency: "weekly" },
     { path: "/autofill", priority: 0.95, changeFrequency: "weekly" },
+    { path: "/autofill-extension", priority: 0.98, changeFrequency: "weekly" },
     { path: "/new-tab", priority: 0.95, changeFrequency: "weekly" },
     { path: "/chrome-extension", priority: 0.95, changeFrequency: "weekly" },
     { path: "/pro", priority: 0.9, changeFrequency: "weekly" },

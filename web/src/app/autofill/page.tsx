@@ -12,11 +12,17 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import { SEO_KEYWORDS } from "@/lib/seo/keywords";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Chrome Autofill Extension & AI Form Filler — Ranasi",
+  title: "Autofill Extension — Auto Fill Chrome Forms Free | Ranasi",
   description:
-    "Fill web forms in one click with Ranasi, a Chrome autofill extension with AI form fill, local profiles, and a Pro new-tab desktop. Free to start.",
+    "Ranasi autofill extension for Chrome: auto fill name, email, phone, and address in one click. Free Chrome extension. Pro AI form filler + new-tab desktop.",
   path: "/autofill",
-  keywords: SEO_KEYWORDS.slice(0, 40),
+  keywords: [
+    "autofill extension",
+    "auto fill",
+    "autofill",
+    "chrome autofill extension",
+    ...SEO_KEYWORDS.slice(0, 36),
+  ],
 });
 
 const FAQS = [
@@ -94,12 +100,13 @@ export default function AutofillSeoPage() {
       <article className="section seo-article" style={{ marginTop: 12 }}>
         <p className="section-label">Chrome autofill</p>
         <h1 className="seo-h1">
-          Chrome autofill extension for one-click form fill
+          Autofill extension — auto fill Chrome forms in one click
         </h1>
         <p className="section-lead">
-          Ranasi helps you auto fill web forms in Chrome — name, email, phone,
-          address, and more — with a single Auto-Fill action. Start free, upgrade
-          to Pro for AI-assisted filling and a premium new-tab desktop.
+          Ranasi is a free <strong>autofill extension</strong> for Chrome.{" "}
+          <strong>Auto fill</strong> web forms — name, email, phone, address, and
+          more — with one Auto-Fill action. Upgrade to Pro for AI-assisted filling
+          and a premium new-tab desktop.
         </p>
 
         <div className="cta-row" style={{ marginBottom: 36 }}>

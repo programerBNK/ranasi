@@ -1,49 +1,49 @@
 # SEO for Ranasi — ranking for real keywords
 
-## What Google shows today (tested)
+## Tested Google results (Jul 2026)
 
-| Query | Result |
-|-------|--------|
-| `Ranasi` | Site found (brand search works) |
-| `autofill` / `auto fill` alone | Dominated by Chrome + big Store extensions — Ranasi will not appear soon |
-| Exact long-tail matching `/autofill` title | `www.ranasi.com/autofill` can appear |
-| `chrome new tab dashboard` | Competitive Store listings; need `/new-tab` + Store SEO |
+| Query | Ranasi on page 1? | Who wins |
+|-------|-------------------|----------|
+| `Ranasi` | Yes (brand) | ranasi.com |
+| `autofill` alone | **No** | Google/Chrome docs, MDN |
+| `auto fill chrome extension` | **No** | Lightning Autofill, Filliny, etc. (Store) |
+| `autofill extension` | **No** | Established Store listings |
+| `chrome extension` alone | **No** | Millions of results — unrealistic head term |
 
-**Rule:** Rank for *intent phrases* first (`chrome autofill extension`, `custom new tab chrome`, `auto fill chrome extension`). Head terms like bare `autofill` take months + Store traction + links.
+**Honest limit:** Code cannot force page-1 for bare `autofill` or `chrome extension`. Those are owned by Google + 10+ year Store products. What *does* move the needle:
+
+1. **Chrome Web Store title/summary** containing `Autofill` + `Chrome Extension` (copy in `STORE_LISTING.md`)
+2. Pillar pages with exact phrases (especially `/autofill-extension`)
+3. GSC indexing + time + installs/reviews
+4. Long-tails first (`autofill extension for chrome free`, `auto fill chrome extension one click`)
 
 ## English for “จัดหน้าเว็บเหมือน desktop”
 
-Use these on Store + pages (Ranasi already targets them on `/new-tab`):
+- custom new tab / new tab page
+- desktop-style new tab / new tab desktop
+- new tab dashboard / browser start page
+- pin websites / speed dial
 
-- **custom new tab** / **new tab page (NTP)**
-- **desktop-style new tab** / **new tab desktop**
-- **new tab dashboard** / **browser start page**
-- **pin websites** / **speed dial**
+Spelling: use **extension** (not “extention”). Google autocorrects the typo.
 
 ## Do NOT target OCR
 
-Ranasi does **not** do OCR (image text scanning). Claiming OCR hurts trust and rankings. FAQ on `/chrome-extension` states this clearly.
+Ranasi has no OCR.
 
-## Pillar pages (index these in GSC)
+## Pillar pages — request indexing after deploy
 
 | Path | Intent |
 |------|--------|
+| `/autofill-extension` | autofill extension, auto fill extension |
 | `/autofill` | autofill, auto fill, AI form filler |
-| `/new-tab` | new tab desktop, custom start page, pin sites |
-| `/chrome-extension` | chrome extension + install funnel |
-| `/` | brand + product overview |
+| `/chrome-extension` | chrome extension |
+| `/new-tab` | new tab desktop |
+| `/` | brand |
 
 Sitemap: `https://www.ranasi.com/sitemap.xml`
 
-## After every deploy
+## After deploy + Store edit
 
-1. Google Search Console → **URL Inspection** → request indexing for `/`, `/autofill`, `/new-tab`, `/chrome-extension`
-2. Confirm sitemap still **Success**
-3. Set Vercel `NEXT_PUBLIC_EXTENSION_URL` to the live Store URL (site also falls back to the published listing ID)
-4. Optimize **Chrome Web Store** title/description with the same phrases (Store search ≠ Google web search, but both matter)
-
-## Honest timeline
-
-- Brand (`Ranasi`): days–weeks once indexed
-- Mid-tail (`chrome autofill extension one click`): weeks–months
-- Head (`autofill`): unlikely without major authority; aim for Store category + long-tails instead
+1. GSC → URL Inspection → request indexing for the paths above
+2. Developer Dashboard → update Title/Summary/Description → resubmit
+3. Set `NEXT_PUBLIC_EXTENSION_URL` on Vercel

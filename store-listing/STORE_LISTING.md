@@ -24,48 +24,54 @@ PNG 24-bit ไม่มี alpha ตามสเปก Store
 
 ### Title
 ```
-Ranasi
+Ranasi Autofill Chrome Extension
 ```
+(≤45 chars · includes autofill + Chrome extension so Store + Google can match)
 
 ### Summary
 ```
-Smart AI Browser Assistant — one-click autofill from your local profile
+Autofill / auto fill web forms in one click. Free Chrome autofill extension with profiles + desktop new tab.
 ```
+(≤132 chars)
 
 ### Description — Language = English
 ```
-Ranasi fills web forms in one click from a profile you keep on your device.
+Ranasi is an autofill extension for Chrome — auto fill web forms in one click from a local profile, plus a desktop-style new tab to pin websites.
+
+AUTOFILL / AUTO FILL
+• One-click Auto-Fill on web forms (name, email, phone, address, and more)
+• Local profile stored on your device
+• Free Chrome extension to start
+• Pro: Server AI Auto-Fill for harder forms
+
+CHROME EXTENSION + NEW TAB DESKTOP
+• Replace the empty new tab with a themed desktop start page
+• Pin favorite websites (unlimited on Pro)
+• 12 premium themes on Pro (default Noir Gold)
 
 FREE
-• Save your profile (name, email, phone, address, and more)
-• One-click Auto-Fill on supported sites
+• 1 profile · local Auto-Fill
 • Mint & Slate themes
 • Up to 10 desktop sites
 
-PRO ($10/year)
-• 12 premium themes (default Noir Gold)
-• Unlimited sites
+PRO — $10/year
+• Server AI fill
 • Up to 5 profiles
-• Server AI fill for harder forms
-• Export / import
+• Unlimited sites · export / import
+• Premium themes
 
-How to get started
-1. Install Ranasi from the Chrome Web Store
-2. Open Options and create your profile
-3. Visit a form page and click Auto-Fill
+HOW TO START
+1. Install this Chrome autofill extension from the Chrome Web Store
+2. Open Options → save your autofill profile
+3. Open a form → press Auto-Fill with AI
+4. Open a new tab → pin sites on your desktop
 
-Pro license
-• Buy at https://www.ranasi.com/pro
-• Activate the key in Extension Options → License
-• Or validate on https://www.ranasi.com/activate
-
-Privacy
-• Free fill runs from your local profile in the browser
-• Pro license checks and optional AI fill use https://api.ranasi.com
-• We do not sell your data
-
+Pro license: https://www.ranasi.com/pro
+Activate: Extension Options → License (or https://www.ranasi.com/activate)
+Guides: https://www.ranasi.com/autofill-extension
+Privacy: https://www.ranasi.com/privacy
 Website: https://www.ranasi.com
-Support: https://www.ranasi.com
+Support: bnatharuch@gmail.com
 ```
 
 ### Category *

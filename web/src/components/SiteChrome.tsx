@@ -53,8 +53,9 @@ export function SiteFooter() {
       </div>
       <div className="site-footer-links">
         <Link href="/autofill">Autofill</Link>
+        <Link href="/autofill-extension">Autofill Extension</Link>
         <Link href="/new-tab">New Tab</Link>
-        <Link href="/chrome-extension">Extension</Link>
+        <Link href="/chrome-extension">Chrome Extension</Link>
         <Link href="/pro">Get Pro</Link>
         <Link href="/activate">Activate</Link>
         <Link href="/privacy">Privacy</Link>
