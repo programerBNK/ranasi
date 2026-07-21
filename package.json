@@ -1,7 +1,7 @@
 {
   "name": "ranasi",
   "displayName": "Ranasi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Autofill / auto fill web forms in one click — Chrome autofill extension with desktop new tab",
   "type": "module",
   "scripts": {
