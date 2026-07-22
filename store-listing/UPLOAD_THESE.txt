@@ -1,0 +1,26 @@
+Chrome Web Store screenshots — upload these 5 (in order)
+
+IMPORTANT:
+1. In Chrome Web Store Developer Dashboard → Store listing → Screenshots,
+   DELETE ALL existing Localized AND Global screenshots first.
+2. Then upload these 5 JPEGs in this exact order to BOTH Localized and Global
+   (or Localized 1–5 and Global the same 5).
+
+Files (absolute paths):
+
+1. /Users/natharuch/Documents/ranasi/store-listing/cws-1-profile-1280x800.jpg
+   Profile Setup
+
+2. /Users/natharuch/Documents/ranasi/store-listing/cws-2-desktop-1280x800.jpg
+   Pro Desktop (compact)
+
+3. /Users/natharuch/Documents/ranasi/store-listing/cws-3-autofill-empty-1280x800.jpg
+   Auto-Fill empty demo
+
+4. /Users/natharuch/Documents/ranasi/store-listing/cws-4-autofill-filled-1280x800.jpg
+   Auto-Fill filled demo
+
+5. /Users/natharuch/Documents/ranasi/store-listing/cws-5-desktop-window-1280x800.jpg
+   Pro Desktop full window
+
+All files are 1280×800 RGB JPEG (quality 92), no fake Chrome Web Store chrome.
