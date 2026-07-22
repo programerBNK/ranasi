@@ -10,13 +10,13 @@
 | ช่องใน Dashboard | ไฟล์ | ขนาด |
 |------------------|------|------|
 | **Store icon** * | `store-icon-128.png` | 128×128 |
-| **Screenshots** * | `screenshot-1-1280x800.png` | 1280×800 |
-| **Screenshots** | `screenshot-2-1280x800.png` | 1280×800 |
+| **Screenshots** * | `screenshot-1-1280x800.jpg` (หรือ `.png`) | 1280×800 |
+| **Screenshots** | `screenshot-2-1280x800.jpg` (หรือ `.png`) | 1280×800 |
 | Small promo tile | `promo-small-440x280.png` | 440×280 |
 | Marquee promo tile | `promo-marquee-1400x560.png` | 1400×560 |
 | Global promo video | *(เว้นว่างได้)* | — |
 
-PNG 24-bit ไม่มี alpha ตามสเปก Store
+PNG 24-bit ไม่มี alpha ตามสเปก Store · JPEG preferred for screenshots (clean product UI only — no fake Featured/star-rating chrome)
 
 ---
 
@@ -30,7 +30,7 @@ Ranasi Autofill Chrome Extension
 
 ### Summary
 ```
-Autofill / auto fill web forms in one click. Free Chrome autofill extension with profiles + desktop new tab.
+Chrome autofill extension with profiles and desktop new tab. Pro from $10/year.
 ```
 (≤132 chars)
 
@@ -41,7 +41,7 @@ Ranasi is an autofill extension for Chrome — auto fill web forms in one click 
 AUTOFILL / AUTO FILL
 • One-click Auto-Fill on web forms (name, email, phone, address, and more)
 • Local profile stored on your device
-• Free Chrome extension to start
+• Included without payment to start
 • Pro: Server AI Auto-Fill for harder forms
 
 CHROME EXTENSION + NEW TAB DESKTOP
@@ -49,7 +49,7 @@ CHROME EXTENSION + NEW TAB DESKTOP
 • Pin favorite websites (unlimited on Pro)
 • 12 premium themes on Pro (default Noir Gold)
 
-FREE
+INCLUDED WITHOUT PAYMENT
 • 1 profile · local Auto-Fill
 • Mint & Slate themes
 • Up to 10 desktop sites
